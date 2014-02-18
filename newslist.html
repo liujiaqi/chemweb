@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>山东大学化学与化工学院</title>
 <link rel="stylesheet" href="css/style.css" type="text/css" />
+<script type="text/javascript" src="js/jquery.min.js"></script>
 
 </head>
 
@@ -16,18 +17,45 @@
 <!--导航-->
 <div class="lead">
 <div id="slatenav">
-<ul>
-<li><a href="index.html">首页</a></li>
-<li><a href="introduce.html">学院概况</a></li>
-<li><a href="">党政工作</a></li>
-<li><a href="teachers.html">师资力量</a></li>
-<li><a href="">办公信息</a></li>
-<li><a href="">人才培养</a></li>
-<li><a href="">学科建设</a></li>
-<li><a href="">重点实验室</a></li>
-<li><a href="">国家工程技术中心</a></li>
-<li><a href="">支撑平台</a></li>
-<li><a href="">学生天地</a></li>
+<ul id="nav">
+<li id="mainlevel_01" class="mainlevel"><a href="index.html">首页</a></li>
+<li id="mainlevel_02" class="mainlevel"><a href="introduce.html">学院概况</a>
+    <ul style="display: none;" id="sub_02">
+        <li><a href="introduce.html" title="学院简介">学院简介</a></li>
+        <li><a href="introduce.html" title="学校领导">学校领导</a></li>
+        <li><a href="introduce.html" title="机构设置">机构设置</a></li>
+    </ul>
+</li>
+<li id="mainlevel_03" class="mainlevel"><a href="newslist.html">办公信息</a>
+    <ul style="display: none;" id="sub_03">
+        <li><a href="newslist.html" title="办公室">办公室</a></li>
+        <li><a href="newslist.html" title="党委">党委</a></li>
+        <li><a href="newslist.html" title="本科">本科</a></li>
+        <li><a href="newslist.html" title="科研">科研</a></li>
+        <li><a href="newslist.html" title="研究生">研究生</a></li>
+        <li><a href="newslist.html" title="继续教育">继续教育</a></li>
+    </ul>
+</li>
+<li id="mainlevel_04" class="mainlevel"><a href="teachers.html">师资力量</a>
+    <ul style="display: none;" id="sub_04">
+        <li><a href="teachers.html" title="导师风采">导师风采</a></li>
+        <li><a href="teachersdetail" title="师资介绍">师资介绍</a></li>
+    </ul>
+</li>
+
+<li id="mainlevel_05" class="mainlevel"><a href="newslist.html">人才培养</a>
+    <ul style="display: none;" id="sub_05">
+        <li><a href="newslist.html" title="学院简介">本科教育</a></li>
+        <li><a href="#" title="学校领导">研究生教育</a></li>
+        <li><a href="#" title="机构设置">继续教育</a></li>
+    </ul>
+</li>
+<li id="mainlevel_06" class="mainlevel"><a href="#">学科建设</a></li>
+<li id="mainlevel_07" class="mainlevel"><a href="#">学术科研</a></li>
+<li id="mainlevel_08" class="mainlevel"><a href="#">学生工作</a></li>
+<li id="mainlevel_09" class="mainlevel"><a href="http://www.icic.sdu.edu.cn/">重点实验室</a></li>
+<li id="mainlevel_10" class="mainlevel"><a href="http://www.nccm.sdu.edu.cn/">国家工程技术中心</a></li>
+<li id="mainlevel_11" class="mainlevel"><a href="#">支撑平台</a></li>
 </ul>
 </div>
 </div>
@@ -35,23 +63,18 @@
 
 <!--学院概况左边-->
 <div class="left2">
-<div class="left_title">首页新闻</div>
+<div class="left_title">办公信息</div>
 
-
-<div class="leftlist">
+<div class="leftlead">
 <ul>
-<li><a href="">关于组织填报2011-2012年山东大学自主创新基金</a> </li>
-<li><a href="">关于尽快进行山东省科技发展计划项目验收结题</a> </li>
-<li><a href="">2013年度国家自然科学基金项目申请注意事项</a> </li>
-<li><a href="">教职工纳入省医保数据采集工作通知</a> </li>
-<li><a href="">关于我院提交国家基金申请书截止时间通知</a> </li>
-<li><a href="">关于对我校教师参加国际科技组织调查的通知</a> </li>
-
+    <li><a href="#">办公室</a> </li>
+    <li><a href="#">党委</a></li>
+    <li><a href="#">本科</a></li>
+    <li><a href="#">科研</a></li>
+    <li><a href="#">研究生</a></li>
+    <li><a href="#">继续教育</a></li>
 </ul>
 </div>
-
-
-
 </div>
 <!--学院概况左边end-->
 
@@ -97,5 +120,6 @@
 <div class="down">相关链接： <a href="http://www.sdu.edu.cn/">山东大学</a>    |     <a href="http://www.grad.sdu.edu.cn/">山大研究生院</a>    |    <a href="http://www.lib.sdu.edu.cn/">山东大学图书馆</a>     |    <a href="http://202.194.4.88:8080/ec/">示范中心</a>     |    <a href="http://202.194.4.88:8080/wulihx/index.asp"> 化学与化工天地</a>    |     <a href="http://202.194.4.238/chemnew/deng/">纪念邓从豪院士</a> </div>
 </div>
 <!--最外层框架end-->
+<script type="text/javascript" src="js/slide.js"></script>
 </body>
 </html>

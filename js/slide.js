@@ -63,3 +63,22 @@ $(function() {
 		$("#focus .btn span").stop(true,false).animate({"opacity":"0.4"},300).eq(index).stop(true,false).animate({"opacity":"1"},300); //为当前的按钮切换到选中的效果
 	}
 });
+
+//顶部导航菜单
+  $('li.mainlevel').hover(
+  function(){
+	  $(this).find('a:first').addClass("hover");
+	  var current_li=$(this);
+	  NavWaitSlide = setTimeout(function() { 
+		  if(!$(current_li).children('ul').is(':visible'))
+		  {
+				$(current_li).find('ul').slideDown(200);
+		  }
+	  },100)
+  },
+ function(){
+	  clearTimeout(NavWaitSlide);
+	  $(this).find('ul').slideUp(100);
+	  $(this).find('a:first').removeClass("hover");
+  }
+);
