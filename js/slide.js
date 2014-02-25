@@ -80,5 +80,5 @@ $(function() {
 	  clearTimeout(NavWaitSlide);
 	  $(this).find('ul').slideUp(100);
 	  $(this).find('a:first').removeClass("hover");
-  }
+ }
 );

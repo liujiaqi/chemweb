@@ -1,4 +1,4 @@
-@charset "utf-8";
+﻿@charset "utf-8";
 /* CSS Document */
 
 body{
@@ -72,7 +72,7 @@ body{
 .news{
 	float:left;
 	width:357px;
-	height:200px;
+	height:283px;
 	
 	margin-top:10px;
 	_margin-top:5px;
@@ -170,7 +170,7 @@ body{
 .news2{
 	float:left;
 	width:435px;
-	height:360px;
+	height:260px;
 	margin-left:10px;
 	_margin-left:5px;
 	margin-top:10px;
@@ -195,7 +195,7 @@ body{
 .down{
 	background:url(../images/down.jpg);
 	width:980px;
-	height:19px;
+	height:3em;
 	text-align:center;
 	color:#FFF;
 	font-size:14px;
@@ -371,8 +371,11 @@ body{
 .teacherDetail ul li a:hover{
 	color:#007cc3;
 }
-
 /*老师详细信息end*/
+
+/*教师列表*/
+.teacher_list ul li { width:5em;}
+
 
 /*二级界面end*/
 
