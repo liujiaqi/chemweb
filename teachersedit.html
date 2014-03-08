@@ -1,0 +1,155 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>山东大学化学与化工学院</title>
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="editor/xheditor.min.js"></script>
+    <script type="text/javascript" src="editor/xheditor_lang/zh-cn.js"></script>
+</head>
+
+<body>
+    <!--最外层框架-->
+    <div class="main">
+        <!--标头图片-->
+        <div class="up"></div>
+
+        <!--导航-->
+        <div class="lead">
+            <div id="slatenav">
+                <ul id="nav">
+                    <li id="mainlevel_01" class="mainlevel"><a href="index.html">首页</a></li>
+                    <li id="mainlevel_02" class="mainlevel">
+                        <a href="introduce.html">学院概况</a>
+                        <ul style="display: none;" id="sub_02">
+                            <li><a href="introduce.html" title="学院简介">学院简介</a></li>
+                            <li><a href="introduce.html" title="学院领导">学院领导</a></li>
+                            <li><a href="introduce.html" title="机构设置">机构设置</a></li>
+                        </ul>
+                    </li>
+                    <li id="mainlevel_03" class="mainlevel">
+                        <a href="newslist.html">办公信息</a>
+                    </li>
+                    <li id="mainlevel_04" class="mainlevel">
+                        <a href="teachers.html" class="current">师资力量</a>
+                        <ul style="display: none;" id="sub_04">
+                            <li><a href="teachers.html" title="导师风采">导师风采</a></li>
+                            <li><a href="teachersdetail" title="师资介绍">师资介绍</a></li>
+                        </ul>
+                    </li>
+
+                    <li id="mainlevel_05" class="mainlevel">
+                        <a href="newslist.html">人才培养</a>
+                        <ul style="display: none;" id="sub_05">
+                            <li><a href="newslist.html" title="本科教学">本科教学</a></li>
+                            <li><a href="#" title="研究生教育">研究生教育</a></li>
+                            <li><a href="#" title="继续教育">继续教育</a></li>
+                        </ul>
+                    </li>
+                    <li id="mainlevel_06" class="mainlevel"><a href="#">学科建设</a></li>
+                    <li id="mainlevel_07" class="mainlevel"><a href="#">学术科研</a></li>
+                    <li id="mainlevel_08" class="mainlevel"><a href="#">学生工作</a></li>
+                    <li id="mainlevel_09" class="mainlevel"><a href="http://www.icic.sdu.edu.cn/">重点实验室</a></li>
+                    <li id="mainlevel_10" class="mainlevel"><a href="http://www.nccm.sdu.edu.cn/">国家工程技术中心</a></li>
+                    <li id="mainlevel_11" class="mainlevel"><a href="#">支撑平台</a></li>
+                </ul>
+            </div>
+        </div>
+        <!--导航end-->
+        <!--学院概况左边-->
+        <div class="left2">
+            <div class="left_title">师资力量</div>
+
+            <div class="leftlead">
+                <ul>
+                    <li><a href="teachers.html">师资介绍</a> </li>
+                    <li><a href="teachersdetail.html">导师风采</a> </li>
+                    <li><a href="#" onclick="edit();return false;">修改密码</a> </li>
+                </ul>
+
+                <div id="ed_login" style="margin-left:40px; text-align:left;width:220px; display:none;">
+                    <form>
+                        <label for="passwd" style="margin-left:2em;">密码</label>
+                        <input id="passwd" type="password" style="width:90px;" /><br />
+                        <label for="repasswd">重复密码</label>
+                        <input id="repasswd" type="password" style="width:90px;" />
+                        <input type="submit" value="确定"/>
+                    </form>
+                </div>
+                <script type="text/javascript">
+                    function edit() {
+                        $("#ed_login").fadeIn();
+                    }
+                </script>
+            </div>
+        </div>
+
+        <!--学院概况左边end-->
+        <!--右侧内容-->
+        <div class="right2">
+            <div class="right_title">导师风采</div>
+
+            <div class="content">
+                <form>
+                    <table width="100%" border="0" cellspacing="10">
+                        <tr>
+
+                            <td>
+                                <div class="teacherDetail">
+                                    <textarea class="xheditor {tools:'Blocktag,FontSize,Bold,Cut,Copy,Paste,Pastetext,Source'}" style="height:250px;width:100%;">
+                                        <h4>【个人简介】</h4>
+
+                                        <ul>
+                                            <li>姓名：李希友</li>
+                                            <li>性别：男</li>
+                                            <li>出生日期：1964年10月</li>
+                                            <li>学历：</li>
+                                            <li>职称：教授 （博导）</li>
+                                            <li>学术身份：</li>
+                                            <li>行政职务：</li>
+                                            <li>学术团体兼职：</li>
+                                            <li>研究类别：无机化学</li>
+                                            <li>工作单位：无机化学研究所</li>
+                                            <li>电话：0531-88369877</li>
+                                            <li>传真：</li>
+                                            <li>地址：</li>
+                                            <li>E-mail: xiyouli@sdu.edu.cn</li>
+                                        </ul>
+
+                                    </textarea>
+                                </div>
+                            </td>
+                            <td width="260">
+                                <img src="images/t1.jpg" width="180" height="220" />
+                                <br />
+                                <input type="button" value="上传" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="teacherDetail">
+                                    <textarea class="xheditor {tools:'simple'}" style="width:100%;height:400px;"></textarea>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="center">
+                                <input type="submit" value="提交" />
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+        <!--右侧内容end-->
+        <div style="clear:both;"></div>
+        <div class="down">
+            相关链接： <a href="http://www.sdu.edu.cn/">山东大学</a><br />
+            地址：中国山东省济南市山大南路27号&nbsp;&nbsp;&nbsp;邮编：250100&nbsp;&nbsp;&nbsp;电话：0531-88364464&nbsp;&nbsp;&nbsp;传真：0531-88564464
+        </div>
+    </div>
+    <script type="text/javascript" src="js/slide.js"></script>
+    <!--最外层框架end-->
+    </body>
+</html>
