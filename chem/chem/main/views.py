@@ -4,6 +4,7 @@ from django.core.context_processors import csrf
 from django.shortcuts import render_to_response
 from django.http import HttpResponseNotFound
 from main.models import *
+from main.cms import divpage
 
 def index(request):
     nav_top = Nav_top.objects.all()
@@ -25,7 +26,15 @@ def list(request,id):
         bname = Block.objects.get(id = id).name
     except:
         return HttpResponseNotFound('<h1>Page not found</h1>')
-    article = Article.objects.filter(bid = id).order_by('-id')[:22]
+
+    try:
+        curpage = int(request.GET.get('page'))
+    except:
+        curpage = 1
+
+    page = divpage(Article.objects.filter(bid = id).count(), 20, curpage)
+
+    article = Article.objects.filter(bid = id).order_by('-id')[(page['page']-1)*20:page['page']*20]
     c = locals()
     c.update(csrf(request))
     return render_to_response('main/list.html', c)

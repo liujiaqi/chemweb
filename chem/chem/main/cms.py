@@ -52,6 +52,7 @@ def logout(request):
 
 def cms(request, method = None, id = None):
     ip = getip(request)
+
     if not 'id' in request.session:
         return HttpResponseRedirect('/')
     try:
@@ -66,7 +67,10 @@ def cms(request, method = None, id = None):
         log("管理员修改密码", ip, user.id)
         del request.session['id']
         return HttpResponse("OK")
-
+    try:
+        curpage = int(request.GET.get('page'))
+    except:
+        curpage = 1
     if method == "news":
 
         bls = []#用户可管理的板块
@@ -170,10 +174,12 @@ def cms(request, method = None, id = None):
             q = Q()
             for bid in bids:
                 q = q | Q(bid = bid)
-            article = Article.objects.filter(q).order_by('-id')
+            page = divpage(Article.objects.filter(q).count(), 20, curpage)
+            article = Article.objects.filter(q).order_by('-id')[(page['page']-1)*20:page['page']*20]
         else:
             if id in bids:
-                article = Article.objects.filter(bid = id).order_by('-id')
+                page = divpage(Article.objects.filter(bid = id).count(), 20, curpage)
+                article = Article.objects.filter(bid = id).order_by('-id')[(page['page']-1)*20:page['page']*20]
             else:
                 return HttpResponseRedirect('/cms/news.html')
         c = locals()
@@ -207,7 +213,8 @@ def cms(request, method = None, id = None):
                 log("删除的图片Id不存在", ip, user.id)
                 hint = '不存在要删除的图片'
 
-        pics = Pic.objects.all().order_by('-id')
+        page = divpage(Pic.objects.all().count(), 24, curpage)
+        pics = Pic.objects.all().order_by('-id')[(page['page']-1)*24:page['page']*24]
         c = locals()
         c.update(csrf(request))
         return render_to_response('main/cms_pics.html', c)
@@ -268,7 +275,8 @@ def cms(request, method = None, id = None):
                 hint = '不存在要修改密码的教师'
 
         labs = Lab.objects.all()
-        teacher = Teacher.objects.all()
+        page = divpage(Teacher.objects.all().count(), 20, curpage)
+        teacher = Teacher.objects.all()[(page['page']-1)*20:page['page']*20]
         c = locals()
         c.update(csrf(request))
         return render_to_response('main/cms_teas.html', c)
@@ -354,11 +362,10 @@ def cms(request, method = None, id = None):
                 hint = "修改成功"
             except:
                 hint = "不存在要修改的用户"
-
-        users = User.objects.all()
+                
+        page = divpage(User.objects.all().count(), 20, curpage)
+        users = User.objects.all()[(page['page']-1)*20:page['page']*20]
         bname = '后台用户管理'
-        labs = Lab.objects.all()
-        teacher = Teacher.objects.all()
         c = locals()
         c.update(csrf(request))
         return render_to_response('main/cms_user.html', c)
@@ -458,6 +465,27 @@ def teacheredit(request, id, method = None):
 
     return HttpResponse("OK")
 
+def divpage(count, per, cur):
+    page = {}
+    page['artc'] = count
+    page['pagec'] = int((page['artc'] + per -1) / per)
+    page['range'] = range(1,page['pagec'] + 1)
+
+    if cur >= 1 and cur <= page['pagec']:
+        page['page'] = int(cur)
+    else:
+        page['page'] = 1
+
+    if page['page'] <= 1:
+        page['pre'] = 0
+    else:
+        page['pre'] = page['page'] - 1
+
+    if page['page'] >= page['pagec']:
+        page['next'] = 0
+    else:
+        page['next'] = page['page'] + 1
+    return page
 
 def log(log, ip, uid=0):
     Log(uid = uid,

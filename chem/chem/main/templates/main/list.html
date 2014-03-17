@@ -8,5 +8,17 @@
             </li>
         {% endfor %}
     </ul>
-    <div class="page" align="center">1/2页 共29条 <a href="#">首页</a> <a href="#">下一页</a> <a href="#">尾页</a> 跳转至<select name="pagerMenu" onchange="location=''" ><option value="1" selected="selected">1</option><option value="2">2</option></select>页</div>
+    <div class="page" align="center">
+        {{ page.page }}/{{ page.pagec }}页&nbsp;共{{ page.artc }}条
+        <a href="?page=1">首页</a>
+        {% if page.pre != 0%}<a href="?page={{ page.pre }}">上一页</a>{% endif %}&nbsp;
+        {% if page.next != 0%}<a href="?page={{ page.next }}">下一页</a>{% endif %} &nbsp;
+        <a href="?page={{ page.pagec }}">尾页</a>
+        跳转至
+        <select onchange="location.href=this.options[this.selectedIndex].value" >
+            {% for i in page.range %}
+                <option value="?page={{ i }}">{{ i }}</option>
+            {% endfor %}
+        </select>页
+    </div>
 {% endblock %}
