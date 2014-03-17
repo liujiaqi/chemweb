@@ -1,0 +1,20 @@
+{% extends "main/cms.html "%}
+
+{% load staticfiles %}
+{% block js %}
+<script type="text/javascript" src="{% static 'main/editor/xheditor.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'main/editor/xheditor_lang/zh-cn.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+	{% block article %}{% endblock %}
+    <div style="text-align:center;">
+        <form method="post">
+            <textarea name="content" class="xheditor {tools:'Blocktag,List,FontSize,Bold,Cut,Copy,Paste,Pastetext,Source'}" style="height:500px;width:100%;">
+                {{ art.content|safe }}
+            </textarea>
+            {% csrf_token %}
+            <input type="submit" class="button" value="提交" />
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends "main/template.html "%}
+{% block login %}
+<form id="tealogin_fr" action="teaedit-{{ tea.id }}.html" method="post" onsubmit="return tealogin();">
+{% endblock %}
+{% block content %}
+    <table width="100%" border="0" cellspacing="10">
+        <tr>
+            <td>
+                <h4>【个人简介】</h4>
+                {{ tea.introduce|safe }}
+            </td>
+            <td width="260"><img src="{{ tea.photo }}" width="180" height="220" /></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h4>【学习及工作经历】</h4>
+                {{ tea.experience|safe }}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h4>【主讲课程】</h4>
+                {{ tea.course|safe }}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h4>【研究领域和兴趣】</h4>
+                {{ tea.research|safe }}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h4>【主要论著】</h4>
+                {{ tea.article|safe }}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h4>【科研项目】</h4>
+                {{ tea.project|safe }}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h4>【科研成果】</h4>
+                {{ tea.achievement|safe }}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div class="teacherDetail">
+                    <h4>【所获专利】</h4>
+                    {{ tea.patent|safe }}
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h4>【联合培养情况】</h4>
+                {{ tea.union|safe }}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h4>【拟招收研究生情况】</h4>
+                {{ tea.student|safe }}
+            </td>
+        </tr>
+                
+    </table>
+{% endblock %}

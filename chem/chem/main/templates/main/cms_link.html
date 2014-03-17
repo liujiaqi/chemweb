@@ -1,0 +1,27 @@
+{% extends "main/cms.html "%}
+
+{% block content %}
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            <label for="title">名称：</label>
+            <input name="title" type="text" style="width:200px;" />
+            <label for="link">链接：</label>
+            <input name="link" type="text" style="width:200px;" />
+            <input type="submit" class="button" value="添加" />
+        </form>
+    </div>
+    <br />
+    <ul class="list">
+        {% for lk in link %}
+            <li>
+                <a href="{{ lk.link }}" title="{{ lk.title }}" style="width:400px;">{{ lk.title }}</a>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="delete" value="{{ lk.id }}" />
+                    <input type="submit" class="cms_button" value="删除" />
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "main/cms.html "%}
+
+{% block content %}
+    <div>
+        添加图片
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="pic" class="button" />
+            <label for="title">名称：</label>
+            <input name="title" type="text" style="width:150px;" />
+            <label for="link">链接：</label>
+            <input name="link" type="text" style="width:150px;" />
+            <input type="submit" class="button" value="上传" />
+        </form>
+    </div>
+    <ul class="cms_picul">
+        {% for pic in pics %}
+            <li>
+                <a href="{{ pic.link }}" title="{{ pic.title }}"><img src="{{ pic.src }}" /></a><br>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="delete" value="{{ pic.id }}" />
+                    <input type="submit" class="button" value="删除"/>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

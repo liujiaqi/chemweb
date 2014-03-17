@@ -1,0 +1,28 @@
+{% extends "main/cms.html "%}
+
+{% load staticfiles %}
+{% block js %}
+<script type="text/javascript" src="{% static 'main/editor/xheditor.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'main/editor/xheditor_lang/zh-cn.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+	{% block article %}{% endblock %}
+    <div style="text-align:center;">
+        <form method="post">
+            <label style="float:left;">消息标题：<input type="text" name="title" class="button" style="width:300px" /></label>
+            {% if id == 4 %}
+                <label style="float:left; margin-left:10px;">通知类型：
+                    <select name="type">
+                        <option value="本科教育">本科教育</option>
+                        <option value=""></option>
+                    </select>
+                </label>
+            {% endif %}
+            <textarea name="content" class="xheditor {tools:'Blocktag,List,FontSize,Bold,Cut,Copy,Paste,Pastetext,Source'}" style="height:500px;width:100%;">
+            </textarea>
+            {% csrf_token %}
+            <input type="submit" name="add_art" class="button" value="提交" />
+        </form>
+    </div>
+{% endblock %}

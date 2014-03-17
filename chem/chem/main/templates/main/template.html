@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        {% load staticfiles %}
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="Author" content="TiH 刘嘉琦" />
+        <meta name="Copyright" content="Copyright (c) 2014 www.chemnew.sdu.edu.cn All rights reserved." />
+        <link type="text/css" rel="stylesheet" href="{% static 'main/styles/main.css' %}" />
+        <script type="text/javascript" src="{% static 'main/scripts/jquery.min.js' %}" ></script>
+        <script type="text/javascript" src="{% static 'main/scripts/main.js' %}" ></script>
+        {% block js %}{% endblock %}
+        <title>山东大学化学与化工学院</title>
+    </head>
+
+    <body>
+        <div class="main">
+            <div class="banner"><a href="/" style="display:block; width:100%; height:100%;"></a></div>
+            <div class="nav_top">
+                <div class="nav_labs">
+                    <ul>
+                        {% for nav_li in nav_top %}
+                            <li><a href="{{ nav_li.link }}" title="{{ nav_li.title }}">{{ nav_li.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="nav_eng"><a href="#">English</a></div>
+            </div>
+            <table class="container">
+                <tr>
+                    <td class="left">
+                        <div class="nav_lf">
+                            <ul>
+                                {% for nav_li in nav_lf %}
+                                    <li><a href="{{ nav_li.link }}" title="{{ nav_li.title }}">{{ nav_li.title }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="lf_addr">
+                            <ul>
+                                <li>电话：0531-88364464</li>
+                                <li>传真：0531-88564464</li>
+                                <li><span><div style="height:2em; width:3em; float:left;">地址：</div><div style="width:8em; float:left">中国山东省济南市山大南路27号</div></span></li>
+                                <li>邮编：250100</li>
+                            </ul>
+                        </div>
+                        <div class="lf_links">
+                            <select onChange="top.location.href=this.options[this.selectedIndex].value">
+                                <option value="#">常用链接</option>
+                                <option value="http://www.sdu.edu.cn/">山东大学首页</option>
+                                <option value="#">链接</option>
+                                <option value="#">链接</option>
+                                <option value="#">链接</option>
+                            </select>
+                        </div>
+                        <div id="lf_login">
+                        <div id="hint"></div>
+                        {% block chpasswd %}
+                        {% block login %}
+                            <form action="/cms/" method="post" onsubmit="return login();">
+                                <label for="uname">用户名</label>
+                                <input id="uname" name="uname" type="text" style="width:90px;" /><br>
+                        {% endblock %}
+                                {% csrf_token %}
+                                <label for="passwd">密&nbsp;&nbsp;&nbsp;码</label>
+                                <input id="passwd" name="passwd" type="password" style="width:90px;" />
+                                <br>
+                                <input type="submit" value="确定"/>
+                            </form>
+                        </div>
+                        <div class="lf_login_en"><a onclick="enlogin();return false;" href="#">管理入口</a></div>
+                        {% endblock %}
+                        <script type="text/javascript">
+                            function enlogin() {
+                                $("#lf_login").fadeIn();
+                            }
+                        </script>
+                    </td>
+                    <td class="right">
+                        {% block container %}
+                            <div class="article">
+                                <div class="art_block">{{ bname }}</div>
+                                <div class="content">
+                                    {% block content %}{{ art.content|safe }}{% endblock %}
+                                </div>
+                            </div>
+                        {% endblock %}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>

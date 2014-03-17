@@ -1,0 +1,33 @@
+{% extends "main/cms.html "%}
+
+{% block content %}
+    <div>
+        <select onchange="location.href=this.options[this.selectedIndex].value" >
+            <option value="news.html">所有消息</option>
+            {% for bl in bls %}
+                <option value="news-{{ bl.id }}.html" {% if id == bl.id %}selected="selected"{% endif %}>{{ bl.name }}</option>
+            {% endfor %}
+        </select>
+        {% if id %}
+            <form method="post" style="display:inline;">
+                {% csrf_token %}
+                <input type="submit" name="add" class="button" value="发布消息"/>
+            </form>
+        {% endif %}
+    </div>
+    <ul class="list">
+        {% for art in article %}
+            <li>
+                <a href="{{ art.link }}" title="{{ art.title }}" style="width:385px;">{{ art.title }}</a>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="aid" value="{{ art.id }}"/>
+                    <input type="submit" name="delete" class="cms_button" value="删除"/>
+                    <input type="submit" name="modify" class="cms_button" value="修改"/>
+                </form>
+                <div class="time">{{ li.time|date:"Y-m-d" }}</div>
+                {% if art.bid == 4 %}<div class="type">{{ art.type }}</div>{% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

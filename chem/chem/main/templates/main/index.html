@@ -1,0 +1,80 @@
+{% extends "main/template.html "%}
+{% load staticfiles %}
+{% block js %}<script type="text/javascript" src="{% static 'main/scripts/slide.js' %}" ></script>{% endblock %}
+{% block container %}
+    <table>
+        <tr>
+            <td class="panl_10">
+                <div id="focus">
+                    <ul>
+                        {% for pic_li in pic %}
+                            <li><a href="{{ pic_li.link }}" title="{{ pic_li.title }}"><img src="{{ pic_li.src }}" width="360" height="260" border="0" /></a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="in_block_1" style="height:189px;">
+                    <div class="in_title_1">
+                        <div class="in_title_na">学术成果</div>
+                        <div class="more"><a href="list-1.html">more</a></div>
+                    </div>
+                    <div class="in_list">
+                        <ul>
+                            {% for art_li in art.0 %}
+                                <li><a href="{{ art_li.link }}" title="{{ art_li.title }}">{{ art_li.title }}</a>{{ art_li.time|date:"Y-m-d"}}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                                    
+                <div class="in_block_1" style="height:145px;">
+                    <div class="in_title_1">
+                        <div class="in_title_na">学术交流</div>
+                        <div class="more"><a href="list-2.html">more</a></div>
+                    </div>
+                    <div class="in_list">
+                        <ul>
+                            {% for art_li in art.1 %}
+                                <li><a href="{{ art_li.link }}" title="{{ art_li.title }}">{{ art_li.title }}</a>{{ art_li.time|date:"Y-m-d"}}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </td>
+            <td  class="panl_10">
+                <div class="in_block_2" style="height:260px;">
+                    <div class="in_title_2">
+                        <div class="in_title_na">学院新闻</div>
+                        <div class="more"><a href="list-3.html">more</a></div>
+                    </div>
+                    <div class="in_list">
+                        <ul>
+                            {% for art_li in art.2 %}
+                                <li><a href="{{ art_li.link }}" title="{{ art_li.title }}">{{ art_li.title }}</a>{{ art_li.time|date:"Y-m-d"}}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="in_block_2" style="height:189px;">
+                    <div class="in_title_2">
+                        <div class="in_title_na">学院通知</div>
+                        <div class="more"><a href="list-4.html">more</a></div>
+                    </div>
+                    <div class="in_list">
+                        <ul>
+                            {% for art_li in art.3 %}
+                                <li><a href="{{ art_li.link }}" title="{{ art_li.title }}">{{ art_li.title }}</a>{{ art_li.time|date:"Y-m-d"}}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="in_disp">
+                    <ul>
+                        <li style="background-color:#09F;"><a href="#">精品课程</a></li>
+                        <li style="background-color:#66C;"><a href="#">双语教学</a></li>
+                        <li style="background-color:#44D;"><a href="#">专题报道</a></li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    </table>
+{% endblock %}

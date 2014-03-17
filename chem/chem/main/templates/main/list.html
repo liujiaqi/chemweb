@@ -1,0 +1,12 @@
+{% extends "main/template.html "%}
+{% block content %}
+    <ul class="list">
+        {% for art in article %}
+            <li><a href="{{ art.link }}" title="{{ art.title }}">{{ art.title }}</a>
+                {% if bname == "学院通知" %}<div class="type">{{ art.type }}</div>{% endif %}
+                <div class="time">{{ art.time|date:"Y-m-d" }}</div>
+            </li>
+        {% endfor %}
+    </ul>
+    <div class="page" align="center">1/2页 共29条 <a href="#">首页</a> <a href="#">下一页</a> <a href="#">尾页</a> 跳转至<select name="pagerMenu" onchange="location=''" ><option value="1" selected="selected">1</option><option value="2">2</option></select>页</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        {% load staticfiles %}
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="Author" content="TiH 刘嘉琦" />
+        <meta name="Copyright" content="Copyright (c) 2014 www.chemnew.sdu.edu.cn All rights reserved." />
+        <link type="text/css" rel="stylesheet" href="{% static 'main/styles/main.css' %}" />
+        <script type="text/javascript" src="{% static 'main/scripts/jquery.min.js' %}" ></script>
+        <script type="text/javascript" src="{% static 'main/scripts/main.js' %}" ></script>
+        {% block js %}{% endblock %}
+        <title>山东大学化学与化工学院 - 内容管理系统</title>
+    </head>
+
+    <body>
+        <div class="main">
+            <div class="banner"><a href="/" style="display:block; width:100%; height:100%;"></a></div>
+            <div class="nav_top">
+                <div class="nav_labs">
+                    <ul>
+                        <li>欢迎您,</a></li>
+                        <li>{{ user.name }}</li>
+                        <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;使用后请记得退出！</li>
+                    </ul>
+                </div>
+                <div class="nav_eng"><a href="/logout/">退出</a></div>
+            </div>
+            <table class="container">
+                <tr>
+                    <td class="left">
+                        <div class="nav_lf">
+                            <ul>
+                                {% if "1" in user.type or "2" in user.type or "3" in user.type or "4" in user.type %}
+								    <li><a href="news.html">消息管理</a></li>
+                                {% endif %}
+                                {% if "b" in user.type %}
+                                    <li><a href="pics.html">首页图片</a></li>
+                                {% endif %}
+                                {% if "a" in user.type%}
+                                    <li><a href="teas.html">教师管理</a></li>
+                                    <li><a href="tlnk.html">顶部链接</a></li>
+                                    <li><a href="lnav.html">左侧导航</a></li>
+                                    <li><a href="intro.html">学院概况</a></li>
+                                    <li><a href="user.html">用户管理</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        <div id="lf_login">
+                            <form id="chpwd_fr" action="/cms" method="post" onsubmit="return chpwd();">
+                                {% csrf_token %}
+                                <label for="passwd">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码</label>
+                                <input id="passwd" type="password" style="width:90px;" /><br>
+								<label for="repasswd">重复密码</label>
+                                <input id="repasswd" type="password" style="width:90px;" /><br>
+                                <input type="submit" value="确定"/>
+                            </form>
+                        </div>
+                        <div class="lf_login_en"><a onclick="login();return false;" href="#">修改密码</a></div>
+                        <script type="text/javascript">
+                            function login() {
+                                $("#lf_login").fadeIn();
+                            }
+                        </script>
+                    </td>
+                    <td class="right">
+                        <div class="article">
+                            <div class="art_block">{{ bname }}</div>
+                            <div class="content">
+                                <div class="hint">{{ hint }}</div>
+                                {% block content %}这里可以写一个欢迎或者公告吧{% endblock %}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>

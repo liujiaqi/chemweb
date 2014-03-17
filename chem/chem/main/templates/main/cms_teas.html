@@ -1,0 +1,46 @@
+{% extends "main/cms.html "%}
+
+{% block content %}
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            <label for="labs">研究所名</label><input name="labs" />
+            <input type="submit" class="button" value="添加研究所" />
+        </form>
+        <form method="post">
+            {% csrf_token %}
+            <label for="name">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名</label><input type="text" name="name" />
+            <label for="lab">研究所</label>
+            <select type="text" name="lab">
+                {% for lab in labs %}
+                    <option value="{{ lab.id }}">{{ lab.name }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" class="button" value="添加教师"/>
+            <input type="submit" name="delab" class="button" value="删除研究所"/>
+        </form>
+    </div>
+    <br>
+    <ul class="list">
+        {% for tea in teacher %}
+            <li>
+                <a href="{{ tea.link }}" title="{{ tea.name }}" style="width:250px;">{{ tea.name }}</a>
+                <div class="type">{{ tea.lab }}</div>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="submit" class="cms_button" value="删除" />
+                    <input type="hidden" name="delete" value="{{ tea.id }}" />
+                </form>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="submit" class="cms_button" value="修改"/>
+                    <input type="hidden" name="chpwd" value="{{ tea.id }}" />
+                    <div class="time">
+                        <label for="passwd">修改密码</label>
+                        <input name="passwd" type="password" style="width:70px;" />
+                    </div>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

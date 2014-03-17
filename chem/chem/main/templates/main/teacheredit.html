@@ -1,0 +1,136 @@
+{% extends "main/template.html "%}
+{% load staticfiles %}
+{% block js %}
+<script type="text/javascript" src="{% static 'main/editor/xheditor.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'main/editor/xheditor_lang/zh-cn.js' %}"></script>
+{% endblock %}
+
+{% block chpasswd %}
+    <form id="chpwd_fr" action="teaedit-{{ tea.id }}.html" method="post" onsubmit="return chpwd();">
+        {% csrf_token %}
+        <label for="passwd">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码</label>
+        <input id="passwd" type="password" style="width:90px;" /><br>
+        <label for="repasswd">重复密码</label>
+        <input id="repasswd" type="password" style="width:90px;" /><br>
+        <br>
+        <input type="submit" value="确定" />
+    </form>
+</div>
+<div class="lf_login_en"><a onclick="enlogin();return false;" href="#">修改密码</a></div>
+{% endblock %}
+
+{% block content %}
+    <div style="display:none"></div>
+    <table width="100%" border="0" cellspacing="10">
+        <tr>
+            <td>
+                <h4>【个人简介】</h4>
+                <textarea class="xheditor {tools:'Blocktag,List,FontSize,Bold,Cut,Copy,Paste,Pastetext,Source'}" style="height:280px;width:80%;">
+                {{ tea.introduce|safe }}
+                </textarea>
+            </td>
+            <td width="260"><img id="photo_img" src="{{ tea.photo }}" width="180px" height="220px" /><br>
+                <form name="photo" action="/teaedit-{{ tea.id }}.html/photo/" method="post" enctype="multipart/form-data" target="hidfr" >
+                    <div id="photoif"></div>
+                    {% csrf_token %}
+                    <input type="file" name="photo" style="width:180px;"></input>
+                    <input type="submit" class="button" value="上传" />
+                </form>
+                <iframe name="hidfr" style="display:none;"></iframe>
+            </td>
+                
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h4>【学习及工作经历】</h4>
+                <textarea class="xheditor {tools:'Blocktag,List,FontSize,Bold,Cut,Copy,Paste,Pastetext,Source'}" style="height:250px;width:100%;">
+                {{ tea.experience|safe }}
+                </textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h4>【主讲课程】</h4>
+                <textarea class="xheditor {tools:'Blocktag,List,FontSize,Bold,Cut,Copy,Paste,Pastetext,Source'}" style="height:250px;width:100%;">
+                {{ tea.course|safe }}
+                </textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h4>【研究领域和兴趣】</h4>
+                <textarea class="xheditor {tools:'Blocktag,List,FontSize,Bold,Cut,Copy,Paste,Pastetext,Source'}" style="height:250px;width:100%;">
+                {{ tea.research|safe }}
+                </textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h4>【主要论著】</h4>
+                <textarea class="xheditor {tools:'Blocktag,List,FontSize,Bold,Cut,Copy,Paste,Pastetext,Source'}" style="height:250px;width:100%;">
+                {{ tea.article|safe }}
+                </textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h4>【科研项目】</h4>
+                <textarea class="xheditor {tools:'Blocktag,List,FontSize,Bold,Cut,Copy,Paste,Pastetext,Source'}" style="height:250px;width:100%;">
+                {{ tea.project|safe }}
+                </textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h4>【科研成果】</h4>
+                <textarea class="xheditor {tools:'Blocktag,List,FontSize,Bold,Cut,Copy,Paste,Pastetext,Source'}" style="height:250px;width:100%;">
+                {{ tea.achievement|safe }}
+                </textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div class="teacherDetail">
+                    <h4>【所获专利】</h4>
+                <textarea class="xheditor {tools:'Blocktag,List,FontSize,Bold,Cut,Copy,Paste,Pastetext,Source'}" style="height:250px;width:100%;">
+                    {{ tea.patent|safe }}
+                </textarea>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h4>【联合培养情况】</h4>
+                <textarea class="xheditor {tools:'Blocktag,List,FontSize,Bold,Cut,Copy,Paste,Pastetext,Source'}" style="height:250px;width:100%;">
+                {{ tea.union|safe }}
+                </textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h4>【拟招收研究生情况】</h4>
+                <textarea class="xheditor {tools:'Blocktag,List,FontSize,Bold,Cut,Copy,Paste,Pastetext,Source'}" style="height:250px;width:100%;">
+                {{ tea.student|safe }}
+                </textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center">
+                <form id="fr_teaedit" action="teaedit-{{ tea.id }}.html/intro/" method="post" enctype="multipart/form-data" onsubmit="return preteaedit(this);">
+                    <input type="hidden" name="introduce"></input>
+                    <input type="hidden" name="experience"></input>
+                    <input type="hidden" name="course"></input>
+                    <input type="hidden" name="research"></input>
+                    <input type="hidden" name="article"></input>
+                    <input type="hidden" name="project"></input>
+                    <input type="hidden" name="achievement"></input>
+                    <input type="hidden" name="patent"></input>
+                    <input type="hidden" name="union"></input>
+                    <input type="hidden" name="student"></input>
+                    {% csrf_token %}
+                    <input type="submit" class="button" value="提交" />
+                </form>
+            </td>
+        </tr>
+    </table>
+{% endblock %}

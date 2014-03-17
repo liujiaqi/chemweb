@@ -1,0 +1,49 @@
+{% extends "main/cms.html "%}
+
+{% load staticfiles %}
+{% block js %}
+<script type="text/javascript" src="{% static 'main/editor/xheditor.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'main/editor/xheditor_lang/zh-cn.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+	<div>
+		<form method="post">
+            {% csrf_token %}
+			<label for="name">用户名：</label>
+			<input name="name" type="text" style="width:100px;" />
+			<label for="link">密码：</label>
+			<input name="link" type="password" style="width:100px;" />
+			<br>权限：
+			<label><input type="checkbox" name="authority" value="1" />学术成果</label>
+			<label><input type="checkbox" name="authority" value="2" />学术交流</label>
+			<label><input type="checkbox" name="authority" value="3" />学院新闻</label>
+			<label><input type="checkbox" name="authority" value="4" />学院通知</label>
+			<label><input type="checkbox" name="authority" value="b" />首页图片</label>
+			<label><input type="checkbox" name="authority" value="a" />系统管理</label>
+			<input type="submit" name="add" class="button" value="添加" />
+		</form>
+	</div>
+	<br>
+	<ul class="list">
+        {% for user in users %}
+		    <li>
+                <form method="post">
+                    {% csrf_token %}
+			        <div style="float:left;">{{ user.name }}</div>
+                    <input type="hidden" name="id" value="{{ user.id }}" />
+			        <input type="submit" name="delete" class="cms_button" value="删除" />
+			        <input type="submit" name="modify" class="cms_button" value="修改" />
+			        <div style="float:right; margin-right:8px;">
+				        <label><input type="checkbox" name="authority" value="1" {% if '1' in user.type %}checked="checked"{% endif %} />学术成果</label>
+				        <label><input type="checkbox" name="authority" value="2" {% if '2' in user.type %}checked="checked"{% endif %} />学术交流</label>
+				        <label><input type="checkbox" name="authority" value="3" {% if '3' in user.type %}checked="checked"{% endif %} />学院新闻</label>
+				        <label><input type="checkbox" name="authority" value="4" {% if '4' in user.type %}checked="checked"{% endif %} />学院通知</label>
+				        <label><input type="checkbox" name="authority" value="b" {% if 'b' in user.type %}checked="checked"{% endif %} />首页图片</label>
+				        <label><input type="checkbox" name="authority" value="a" {% if 'a' in user.type %}checked="checked"{% endif %} />系统管理</label>
+			        </div>
+                </form>
+		    </li>
+        {% endfor %}
+	</ul>
+{% endblock %}

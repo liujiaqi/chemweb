@@ -1,0 +1,21 @@
+{% extends "main/template.html "%}
+{% block content %}
+    <table class="teacher_list" width=95%" border="0" align="center" cellpadding="5 cellspacing="1" bgcolor="#FFFFFF">
+        {% for lab_tr in lab %}
+            {% if forloop.counter0|divisibleby:2 %}
+            <tr bgcolor="#CEE8F2">
+            {% else %}
+            <tr bgcolor="#EEEEEE">
+            {% endif %}
+                <td width="230px;">{{ lab_tr.name }}</td>
+                <td>
+                    <ul>
+                        {% for teacher in lab_tr.teacher %}
+                            <li><a href="{{ teacher.link }}">{{ teacher.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
