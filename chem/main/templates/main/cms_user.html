@@ -1,4 +1,4 @@
-{% extends "main/cms.html "%}
+{% extends "main/cms.html" %}
 
 {% load staticfiles %}
 {% block js %}
@@ -12,8 +12,8 @@
             {% csrf_token %}
 			<label for="name">用户名：</label>
 			<input name="name" type="text" style="width:100px;" />
-			<label for="link">密码：</label>
-			<input name="link" type="password" style="width:100px;" />
+			<label for="passwd">密码：</label>
+			<input name="passwd" type="password" style="width:100px;" />
 			<br>权限：
 			<label><input type="checkbox" name="authority" value="1" />学术成果</label>
 			<label><input type="checkbox" name="authority" value="2" />学术交流</label>

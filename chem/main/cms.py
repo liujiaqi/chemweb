@@ -11,7 +11,7 @@ from django.http.response import HttpResponseRedirect
 from django.http import HttpResponse
 from main.models import *
 
-phupload = 'D:/University/Program/chemical_school_website/chem/chem/main'
+phupload = '/data/django/main'
 
 def getip(request):
     if request.META.has_key('HTTP_X_FORWARDED_FOR'):  
@@ -68,6 +68,8 @@ def cms(request, method = None, id = None):
 
 
     if method == "chpwd":
+        if not request.POST.get('passwd'):
+            return HttpResponse("密码不能为")
         user.password = hashlib.md5(request.POST.get('passwd')).hexdigest().upper()
         user.save()
         log("管理员修改密码", ip, user.id)
@@ -100,33 +102,32 @@ def cms(request, method = None, id = None):
                     log("请求不存在的板块id", ip, user.id)
 
         if request.POST.get('modify'):
-            if id != None:
-                try:
-                    art = Article.objects.get(id = request.POST.get('aid'))
-                    if art.bid != id:
-                        log("!!非正常请求修改文章!!", ip, user.id)
-                        return HttpResponseRedirect('news.html')
-                    bname = '修改消息'
-                    c = locals()
-                    c.update(csrf(request))
-                    return render_to_response('main/cms_modart.html', c)
-                except:
-                    hint = "不存在要修改的文章"
-                    log("修改不存在的文章", ip, user.id)
+            try:
+                art = Article.objects.get(id = request.POST.get('aid'))
+                if str(art.bid) not in user.type:
+                    log("!!越权请求修改文章!!", ip, user.id)
+                    return HttpResponseRedirect('news.html')
+                bname = '修改消息'
+                c = locals()
+                c.update(csrf(request))
+                return render_to_response('main/cms_modart.html', c)
+            except:
+                hint = "不存在要修改的文章"
+                log("修改不存在的文章", ip, user.id)
 
         if request.POST.get('delete'):
-            if id != None:
-                try:
-                    article = Article.objects.get(id = request.POST.get('aid'))
-                    if article.bid != id:
-                        log("!!非正常请求删除文章!!", ip, user.id)
-                        return HttpResponseRedirect('news.html')
-                    article.delete()
-                    log("删除一篇文章", ip, user.id)
-                    hint = "删除成功"
-                except:
-                    hint = "不存在要删除的文章"
-                    log("删除不存在的文章", ip, user.id)
+            try:
+                article = Article.objects.get(id = request.POST.get('aid'))
+                if str(art.bid) not in user.type:
+                    log("!!越权请求修改文章!!", ip, user.id)
+                    return HttpResponseRedirect('news.html')
+                article.state = 0
+                article.save()
+                log("删除一篇文章", ip, user.id)
+                hint = "删除成功"
+            except:
+                hint = "不存在要删除的文章"
+                log("删除不存在的文章", ip, user.id)
 
         if request.POST.get('add_art'):
             if id != None:
@@ -178,12 +179,12 @@ def cms(request, method = None, id = None):
             q = Q()
             for bid in bids:
                 q = q | Q(bid = bid)
-            page = divpage(Article.objects.filter(q).count(), 20, curpage)
-            article = Article.objects.filter(q).order_by('-id')[(page['page']-1)*20:page['page']*20]
+            page = divpage(Article.objects.filter(q).filter(state = 1).count(), 20, curpage)
+            article = Article.objects.filter(q).filter(state = 1).order_by('-id')[(page['page']-1)*20:page['page']*20]
         else:
             if id in bids:
-                page = divpage(Article.objects.filter(bid = id).count(), 20, curpage)
-                article = Article.objects.filter(bid = id).order_by('-id')[(page['page']-1)*20:page['page']*20]
+                page = divpage(Article.objects.filter(bid = id, state = 1).count(), 20, curpage)
+                article = Article.objects.filter(bid = id, state = 1).order_by('-id')[(page['page']-1)*20:page['page']*20]
             else:
                 return HttpResponseRedirect('/cms/news.html')
         c = locals()
@@ -213,14 +214,15 @@ def cms(request, method = None, id = None):
         if request.POST.get('delete'):
             try:
                 pic = Pic.objects.get(id = request.POST.get('delete'))
-                pic.delete()
+                pic.state = 0
+                pic.save()
                 log("删除一张图片", ip, user.id)
             except:
                 log("删除的图片Id不存在", ip, user.id)
                 hint = '不存在要删除的图片'
 
-        page = divpage(Pic.objects.all().count(), 24, curpage)
-        pics = Pic.objects.all().order_by('-id')[(page['page']-1)*24:page['page']*24]
+        page = divpage(Pic.objects.filter(state = 1).count(), 24, curpage)
+        pics = Pic.objects.filter(state = 1).order_by('-id')[(page['page']-1)*24:page['page']*24]
         c = locals()
         c.update(csrf(request))
         return render_to_response('main/cms_pics.html', c)
@@ -244,7 +246,8 @@ def cms(request, method = None, id = None):
         if request.POST.get('delab'):
             try:
                 lab = Lab.objects.get(id = request.POST.get('lab'))
-                lab.delete()
+                lab.state = 0
+                lab.save()
                 log("删除研究所", ip, user.id)
                 hint = "删除研究所成功"
             except:
@@ -264,7 +267,8 @@ def cms(request, method = None, id = None):
         if request.POST.get('delete'):
             try:
                 tea = Teacher.objects.get(id = request.POST.get('delete'))
-                tea.delete()
+                tea.state = 0
+                tea.save()
                 log("删除一名教师", ip, user.id)
                 hint = '删除成功'
             except:
@@ -281,9 +285,9 @@ def cms(request, method = None, id = None):
             except:
                 hint = '不存在要修改密码的教师'
 
-        labs = Lab.objects.all()
-        page = divpage(Teacher.objects.all().count(), 20, curpage)
-        teacher = Teacher.objects.all()[(page['page']-1)*20:page['page']*20]
+        labs = Lab.objects.filter(state = 1)
+        page = divpage(Teacher.objects.filter(state = 1).count(), 20, curpage)
+        teacher = Teacher.objects.filter(state = 1)[(page['page']-1)*20:page['page']*20]
         c = locals()
         c.update(csrf(request))
         return render_to_response('main/cms_teas.html', c)
@@ -312,12 +316,12 @@ def cms(request, method = None, id = None):
     if method == "lnav":
         if request.POST.get('title'):
             Nav_lf(title = request.POST.get('title'), link = request.POST.get('link')).save()
-            log("添加顶部链接", ip, user.id)
+            log("添加左侧链接", ip, user.id)
         elif request.POST.get('delete'):
             try:
                 lnk = Nav_lf.objects.get(id = request.POST.get('delete'))
                 lnk.delete()
-                log("删除一个顶部链接", ip, user.id)
+                log("删除一个左侧链接", ip, user.id)
                 hint = '删除成功'
             except:
                 hint = '不存在要删除的链接'
@@ -330,13 +334,20 @@ def cms(request, method = None, id = None):
 
     if method == "intro":
         if request.POST.get('content'):
-            art = Article.objects.filter(bid = 0)[0]
+            try:
+                art = Article.objects.get(bid = 0)
+            except:
+                art = Article(bid = 0, time = datetime.datetime.now())
+                art.save()
             art.content = request.POST.get('content')
             art.save()
             return HttpResponseRedirect('/cms/')
 
         bname = '学院概况'
-        art = Article.objects.filter(bid = 0)[0]
+        try:
+            art = Article.objects.get(bid = 0)
+        except:
+            art = {}
         c = locals()
         c.update(csrf(request))
         return render_to_response('main/cms_intro.html', c)
@@ -345,7 +356,9 @@ def cms(request, method = None, id = None):
     if method == "user":
         if request.POST.get('add'):
             if request.POST.get('name'):
-                User(name = request.POST.get('name'), type = ''.join(request.POST.getlist('authority'))).save()
+                User(name = request.POST.get('name'), \
+                     type = ''.join(request.POST.getlist('authority')), \
+                     password = hashlib.md5(request.POST.get('passwd')).hexdigest().upper()).save()
                 log("添加用户", ip, user.id)
                 hint = "添加成功"
             else:

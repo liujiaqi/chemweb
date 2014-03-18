@@ -9,11 +9,11 @@ from main.cms import divpage
 def index(request):
     nav_top = Nav_top.objects.all()
     nav_lf = Nav_lf.objects.all()
-    pic = Pic.objects.all().order_by('-id')[:5]
-    art = [Article.objects.filter(bid = 1).order_by('-id')[:7], \
-           Article.objects.filter(bid = 2).order_by('-id')[:5], \
-           Article.objects.filter(bid = 3).order_by('-id')[:10], \
-           Article.objects.filter(bid = 4).order_by('-id')[:7]]
+    pic = Pic.objects.filter(state = 1).order_by('-id')[:5]
+    art = [Article.objects.filter(bid = 1, state = 1).order_by('-id')[:7], \
+           Article.objects.filter(bid = 2, state = 1).order_by('-id')[:5], \
+           Article.objects.filter(bid = 3, state = 1).order_by('-id')[:10], \
+           Article.objects.filter(bid = 4, state = 1).order_by('-id')[:7]]
     c = locals()
     c.update(csrf(request))
     return render_to_response('main/index.html', c)
@@ -32,9 +32,9 @@ def list(request,id):
     except:
         curpage = 1
 
-    page = divpage(Article.objects.filter(bid = id).count(), 20, curpage)
+    page = divpage(Article.objects.filter(bid = id, state = 1).count(), 20, curpage)
 
-    article = Article.objects.filter(bid = id).order_by('-id')[(page['page']-1)*20:page['page']*20]
+    article = Article.objects.filter(bid = id, state = 1).order_by('-id')[(page['page']-1)*20:page['page']*20]
     c = locals()
     c.update(csrf(request))
     return render_to_response('main/list.html', c)
@@ -56,7 +56,10 @@ def introduce(request):
     nav_top = Nav_top.objects.all()
     nav_lf = Nav_lf.objects.all()
     bname = '学院概况'
-    art = Article.objects.filter(bid = 0)[0]
+    try:
+        art = Article.objects.get(bid = 0)
+    except:
+        art = {}
     c = locals()
     c.update(csrf(request))
     return render_to_response('main/template.html', c)
@@ -66,7 +69,7 @@ def teacherls(request):
     nav_top = Nav_top.objects.all()
     nav_lf = Nav_lf.objects.all()
     bname = '师资力量'
-    lab = Lab.objects.all()
+    lab = Lab.objects.filter(state = 1)
     c = locals()
     c.update(csrf(request))
     return render_to_response('main/teachers.html', c)

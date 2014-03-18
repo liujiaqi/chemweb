@@ -15,6 +15,7 @@ urlpatterns = patterns('',
 
     url(r'^login/$', login),
     url(r'^cms/$', cms),
+    url(r'^cms/(?P<method>chpwd)/$', cms),
     url(r'^cms/index.html$', cms),
     url(r'^cms/(?P<method>[a-z]{4,5})\.html$', cms),
     url(r'^cms/(?P<method>[a-z]{4})-(?P<id>[0-9]+)\.html$', cms),

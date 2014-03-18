@@ -1,4 +1,4 @@
 *.suo
 *.pyc
-chem/chem/obj
-/chem/chem/main/static/main/upload/*
+chem/obj
+chem/main/static/main/upload/*
