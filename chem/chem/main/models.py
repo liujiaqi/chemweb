@@ -92,7 +92,7 @@ class Teacher(models.Model):
 
 class User(models.Model):
     id = models.AutoField(primary_key = True)
-    name = models.CharField(max_length = 5)
+    name = models.CharField(max_length = 15)
     password = models.CharField(max_length = 50)
     type = models.CharField(max_length = 10)
 

@@ -61,18 +61,20 @@ def cms(request, method = None, id = None):
         log("越权访问cms",ip)
         return HttpResponseRedirect('/')
 
+    try:
+        curpage = int(request.GET.get('page'))
+    except:
+        curpage = 1
+
+
     if method == "chpwd":
         user.password = hashlib.md5(request.POST.get('passwd')).hexdigest().upper()
         user.save()
         log("管理员修改密码", ip, user.id)
         del request.session['id']
         return HttpResponse("OK")
-    try:
-        curpage = int(request.GET.get('page'))
-    except:
-        curpage = 1
-    if method == "news":
 
+    if method == "news":
         bls = []#用户可管理的板块
         bids = []#用户可管理的板块的id
         block = Block.objects.all();
@@ -81,7 +83,9 @@ def cms(request, method = None, id = None):
                 bids.append(bl.id)
                 bls.append(bl)
         if id != None:
-                id = string.atoi(id)
+            if not id in user.type:
+                return HttpResponseRedirect('news.html')
+            id = string.atoi(id)
 
         if request.POST.get('add'):
             if id != None:
@@ -187,6 +191,8 @@ def cms(request, method = None, id = None):
         return render_to_response('main/cms_news.html', c)
 
     if method == "pics":
+        if not 'b' in user.type:
+            return HttpResponseRedirect('/cms/pics.html')
         bname = '图片管理'
         filehd = request.FILES.get('pic', None)
         if filehd:
@@ -219,7 +225,8 @@ def cms(request, method = None, id = None):
         c.update(csrf(request))
         return render_to_response('main/cms_pics.html', c)
 
-
+    if not 'a' in user.type:
+        return HttpResponseRedirect('/cms/')
     if method == "teas":
         bname = '教师管理'
         
@@ -363,13 +370,13 @@ def cms(request, method = None, id = None):
             except:
                 hint = "不存在要修改的用户"
                 
-        page = divpage(User.objects.all().count(), 20, curpage)
-        users = User.objects.all()[(page['page']-1)*20:page['page']*20]
+        page = divpage(User.objects.exclude(id = 1).count(), 20, curpage)
+        users = User.objects.exclude(id = 1)[(page['page']-1)*20:page['page']*20]
         bname = '后台用户管理'
         c = locals()
         c.update(csrf(request))
         return render_to_response('main/cms_user.html', c)
-
+    
     bname = '欢迎使用山东大学化学与化工学院网站内容管理系统!'
     c = locals()
     c.update(csrf(request))
@@ -378,92 +385,89 @@ def cms(request, method = None, id = None):
 def teacheredit(request, id, method = None):
     ip = getip(request)
 
-    if not request.POST.get('login'):
-        if 'teaid' in request.session:
-            #修改密码
-            if method == "chpwd":
-                try:
-                    tea = Teacher.objects.get(id = request.session['teaid'])
-                except:
-                    return HttpResponse("不存在的id")#理论上不会发生
-                tea.password = hashlib.md5(request.POST.get('passwd')).hexdigest().upper()
-                tea.save()
-                log("教师修改密码", ip, tea.id)
-                del request.session['teaid']
-                return HttpResponse("OK")
+    if request.POST.get('login'):
+        #教师登录
+        passwd = hashlib.md5(request.POST.get('passwd')).hexdigest().upper()
+        try:
+            teacher = Teacher.objects.get(id = id)
+        except:
+            return HttpResponse("教师id错误")
 
-            #修改照片
-            if method == "photo":
-                filehd = request.FILES.get('photo', None)
-                if filehd:
-                    if filehd.size > 1000000:
-                        return HttpResponse("<script>parent.photost('照片文件超过1MB','/');</script>")
-                    m = re.match(r'^.+\.(jpg|gif|png)$', filehd.name.lower())
-                    if m == None:
-                        return HttpResponse("<script>parent.photost('请上传一个图片文件','/');</script>")
-                    photo_url = '/static/main/upload/teacher/%s.%s' % (datetime.datetime.now().strftime("%Y%m%d%H%M%S"), m.group(1))
-                    target = open(phupload + photo_url,'wb+')
-                    target.write(filehd.read())
-                    target.close()
-                    try:
-                        tea = Teacher.objects.get(id = request.session['teaid'])
-                    except:
-                        return HttpResponse("<script>parent.photost('不存在的id','/');</script>")
-                    tea.photo = photo_url
-                    tea.save()
-                    log("教师修改照片", ip, tea.id)
-                    return HttpResponse("<script>parent.photost('OK','%s');</script>" % photo_url)
-                else:
-                    return HttpResponse("<script>parent.photost('请选择一张您的照片','/');</script>")
+        if passwd != teacher.password:
+            log("教师密码错误", ip, teacher.id)
+            return HttpResponse("密码错误")
 
-            #修改介绍
-            if method == "intro":
-                try:
-                    tea = Teacher.objects.get(id = request.session['teaid'])
-                except:
-                    return HttpResponseRedirect("/tea-%s.html" % id)
-                tea.introduce = request.POST.get('introduce')
-                tea.experience = request.POST.get('experience')
-                tea.course = request.POST.get('course')
-                tea.research = request.POST.get('research')
-                tea.article = request.POST.get('article')
-                tea.project = request.POST.get('project')
-                tea.achievement = request.POST.get('achievement')
-                tea.patent = request.POST.get('patent')
-                tea.union = request.POST.get('union')
-                tea.student = request.POST.get('student')
-                tea.save()
-                log("教师修改信息", ip, tea.id)
-                del request.session['teaid']
-                return HttpResponseRedirect("/tea-%s.html" % id)
+        log("教师登录成功", ip, teacher.id)
+        request.session['teaid'] = teacher.id
+        return HttpResponse("OK")
 
-            #教师登陆后
-            nav_top = Nav_top.objects.all()
-            nav_lf = Nav_lf.objects.all()
-            bname = '导师风采'
-            tea = Teacher.objects.get(id = id)
-            c = locals()
-            c.update(csrf(request))
-            return render_to_response('main/teacheredit.html', c)
-        else:
+    if 'teaid' not in request.session:
+        return HttpResponseRedirect("/tea-%s.html" % id)
+
+    #修改密码
+    if method == "chpwd":
+        try:
+            tea = Teacher.objects.get(id = request.session['teaid'])
+        except:
+            return HttpResponse("不存在的id")#理论上不会发生
+        tea.password = hashlib.md5(request.POST.get('passwd')).hexdigest().upper()
+        tea.save()
+        log("教师修改密码", ip, tea.id)
+        del request.session['teaid']
+        return HttpResponse("OK")
+
+    #修改照片
+    if method == "photo":
+        filehd = request.FILES.get('photo', None)
+        if not filehd:
+            return HttpResponse("<script>parent.photost('请选择一张您的照片','/');</script>")
+        if filehd.size > 1000000:
+            return HttpResponse("<script>parent.photost('照片文件超过1MB','/');</script>")
+        m = re.match(r'^.+\.(jpg|gif|png)$', filehd.name.lower())
+        if m == None:
+            return HttpResponse("<script>parent.photost('请上传一个图片文件','/');</script>")
+        photo_url = '/static/main/upload/teacher/%s.%s' % (datetime.datetime.now().strftime("%Y%m%d%H%M%S"), m.group(1))
+        target = open(phupload + photo_url,'wb+')
+        target.write(filehd.read())
+        target.close()
+        try:
+            tea = Teacher.objects.get(id = request.session['teaid'])
+        except:
+            return HttpResponse("<script>parent.photost('不存在的id','/');</script>")
+        tea.photo = photo_url
+        tea.save()
+        log("教师修改照片", ip, tea.id)
+        return HttpResponse("<script>parent.photost('OK','%s');</script>" % photo_url)
+
+    #修改介绍
+    if method == "intro":
+        try:
+            tea = Teacher.objects.get(id = request.session['teaid'])
+        except:
             return HttpResponseRedirect("/tea-%s.html" % id)
+        tea.introduce = request.POST.get('introduce')
+        tea.experience = request.POST.get('experience')
+        tea.course = request.POST.get('course')
+        tea.research = request.POST.get('research')
+        tea.article = request.POST.get('article')
+        tea.project = request.POST.get('project')
+        tea.achievement = request.POST.get('achievement')
+        tea.patent = request.POST.get('patent')
+        tea.union = request.POST.get('union')
+        tea.student = request.POST.get('student')
+        tea.save()
+        log("教师修改信息", ip, tea.id)
+        del request.session['teaid']
+        return HttpResponseRedirect("/tea-%s.html" % id)
 
-    #教师登录
-    passwd = hashlib.md5(request.POST.get('passwd')).hexdigest().upper()
-    try:
-        teacher = Teacher.objects.get(id = id)
-    except:
-        return HttpResponse("教师id错误")
-
-    if passwd != teacher.password:
-        log("教师密码错误", ip, teacher.id)
-        return HttpResponse("密码错误")
-
-    log("教师登录成功", ip, teacher.id)
-
-    request.session['teaid'] = teacher.id
-
-    return HttpResponse("OK")
+    #教师登陆后
+    nav_top = Nav_top.objects.all()
+    nav_lf = Nav_lf.objects.all()
+    bname = '导师风采'
+    tea = Teacher.objects.get(id = id)
+    c = locals()
+    c.update(csrf(request))
+    return render_to_response('main/teacheredit.html', c)
 
 def divpage(count, per, cur):
     page = {}
