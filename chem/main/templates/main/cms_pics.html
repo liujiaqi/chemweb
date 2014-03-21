@@ -17,7 +17,7 @@
         <ul class="cms_picul">
             {% for pic in pics %}
                 <li>
-                    <a href="{{ pic.link }}" title="{{ pic.title }}"><img src="{{ pic.src }}" /></a><br>
+                    <a href="{{ pic.link }}" title="{{ pic.title }}" target="_blank"><img src="{{ pic.src }}" /></a><br>
                     <form method="post">
                         {% csrf_token %}
                         <input type="hidden" name="delete" value="{{ pic.id }}" />

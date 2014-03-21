@@ -24,7 +24,7 @@
     <ul class="list">
         {% for tea in teacher %}
             <li>
-                <a href="{{ tea.link }}" title="{{ tea.name }}" style="width:250px;">{{ tea.name }}</a>
+                <a href="{{ tea.link }}" title="{{ tea.name }}" target="_blank" style="width:250px;">{{ tea.name }}</a>
                 <div class="type">{{ tea.lab }}</div>
                 <form method="post">
                     {% csrf_token %}
