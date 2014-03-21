@@ -118,8 +118,8 @@ def cms(request, method = None, id = None):
         if request.POST.get('delete'):
             try:
                 article = Article.objects.get(id = request.POST.get('aid'))
-                if str(art.bid) not in user.type:
-                    log("!!越权请求修改文章!!", ip, user.id)
+                if str(article.bid) not in user.type:
+                    log("!!越权请求删除文章!!", ip, user.id)
                     return HttpResponseRedirect('news.html')
                 article.state = 0
                 article.save()
