@@ -2,7 +2,7 @@
 /* Chemistry Style Document by TiH*/
 
 /* global */
-* { margin:0; padding:0; border:0; }
+* { margin:0; padding:0; }
 body { font-family:"Segoe UI",Verdana,微软雅黑; font-size:14px; color:#000; background:#CCC; text-align:left; height:100%; width:100%; }
 a, a:visited { text-decoration:none; color:#fff; }
 a:hover {text-decoration:underline; }

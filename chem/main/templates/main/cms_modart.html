@@ -20,7 +20,7 @@
                     </select>
                 </label>
             {% endif %}
-            <textarea name="content" class="xheditor {tools:'Blocktag,List,FontSize,Bold,Cut,Copy,Paste,Pastetext,Source'}" style="height:500px;width:100%;">
+            <textarea name="content" class="xheditor-mfull {upLinkUrl:'/upload/ext/',upLinkExt:'zip,rar,doc,docx,ppt,pptx,xls,xlsx,pdf',upImgUrl:'/upload/img/',upImgExt:'jpg,jpeg,gif,png'}" style="height:500px;width:100%;">
                 {{ art.content|safe }}
             </textarea>
             {% csrf_token %}

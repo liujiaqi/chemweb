@@ -10,14 +10,47 @@ from django.shortcuts import render_to_response
 from django.http.response import HttpResponseRedirect
 from django.http import HttpResponse
 from main.models import *
+from django.utils import simplejson
 
-phupload = '/data/django/main'
+pstatic = '/data/django/main'
+filetype = {'img':['.jpg','.jpeg','.gif','.png'], \
+            'ext':['.rar','.zip','.doc','.docx','.ppt','.pptx','.xls','.xlsx','.pdf']}
+
+
+def upload(request, type):
+    if 'HTTP_CONTENT_DISPOSITION' in request.META:#chrome/firefox Xheditor使用的是Html5方式上传
+        fname = request.META['HTTP_CONTENT_DISPOSITION']
+        fname = fname[fname.rindex('filename="')+10 : fname.rindex('"') ]
+        fdata = request.body
+    else:
+        if 'filedata' in request.FILES:
+            fname = request.FILES["filedata"].name
+            fdata = request.FILES["filedata"].read()
+        else:
+            return HttpResponse(simplejson.dumps({'err':'未选择文件','msg':''},ensure_ascii = False))
+    suffix = fname[fname.rindex('.') : ]
+    if not suffix in filetype[type]:
+        return HttpResponse(simplejson.dumps({'err':'支持的文件类型仅有:'+''.join(filetype[type]),'msg':''},ensure_ascii = False))
+
+    try:
+        file_url = '/static/main/upload/news/%s%s' % (datetime.datetime.now().strftime("%Y%m%d%H%M%S"), suffix)
+        target = open(pstatic + file_url,'wb+')
+        target.write(fdata)
+        target.close()
+        if type == 'ext':
+            return HttpResponse(simplejson.dumps({'err':'','msg':'!%s||%s' % (file_url, fname)},ensure_ascii = False))
+        else:
+            return HttpResponse(simplejson.dumps({'err':'','msg':'!'+file_url},ensure_ascii = False))
+    except Exception,e:
+        return HttpResponse(simplejson.dumps({'err':e.message,'msg':''},ensure_ascii = False))
+
 
 def getip(request):
     if request.META.has_key('HTTP_X_FORWARDED_FOR'):  
         return request.META['HTTP_X_FORWARDED_FOR']  
     else:  
         return request.META['REMOTE_ADDR']
+
 
 def login(request):
     uname = request.POST.get('uname')
@@ -104,7 +137,7 @@ def cms(request, method = None, id = None):
         if request.POST.get('modify'):
             try:
                 art = Article.objects.get(id = request.POST.get('aid'))
-                if str(art.bid) not in user.type:
+                if art.bid not in bids:
                     log("!!越权请求修改文章!!", ip, user.id)
                     return HttpResponseRedirect('news.html')
                 bname = '修改消息'
@@ -118,7 +151,7 @@ def cms(request, method = None, id = None):
         if request.POST.get('delete'):
             try:
                 article = Article.objects.get(id = request.POST.get('aid'))
-                if str(article.bid) not in user.type:
+                if not article.bid in bids:
                     log("!!越权请求删除文章!!", ip, user.id)
                     return HttpResponseRedirect('news.html')
                 article.state = 0
@@ -148,7 +181,7 @@ def cms(request, method = None, id = None):
                     hint = "发布成功"
                 except:
                     hint = "不存在要发布消息的板块"
-                    log("!!请求不存在的板块id1!!", ip, user.id)
+                    log("!!请求不存在的板块id!!", ip, user.id)
 
         if request.POST.get('mod_art'):
             if id != None:
@@ -156,23 +189,24 @@ def cms(request, method = None, id = None):
                     type = request.POST.get('type')
                 else:
                     type = ''
-                try:
-                    article = Article.objects.get(id = request.POST.get('aid'))
-                    if article.bid != id:
-                        log("!!非正常请求修改文章!!", ip, user.id)
-                        return HttpResponseRedirect('news.html')
-                    article.title = request.POST.get('title')
-                    article.author = user.name
-                    article.content = request.POST.get('content')
-                    article.time = datetime.datetime.now()
+            try:
+                article = Article.objects.get(id = request.POST.get('aid'))
+                if not article.bid in bids:
+                    log("!!越权请求修改文章!!", ip, user.id)
+                    return HttpResponseRedirect('news.html')
+                article.title = request.POST.get('title')
+                article.author = user.name
+                article.content = request.POST.get('content')
+                article.time = datetime.datetime.now()
+                if id != None:
                     article.type = type
-                    article.save()
-                    log("修改一条消息", ip, user.id)
-                    bname = '消息管理'
-                    hint = "修改成功"
-                except:
-                    hint = "不存在要修改消息的板块"
-                    log("!!请求不存在的板块id2!!", ip, user.id)
+                article.save()
+                log("修改一条消息", ip, user.id)
+                bname = '消息管理'
+                hint = "修改成功"
+            except:
+                hint = "不存在要修改的消息"
+                log("!!不存在要修改的消息!!", ip, user.id)
 
         bname = '消息管理'
         if id == None:
@@ -200,12 +234,12 @@ def cms(request, method = None, id = None):
             if filehd.size > 1000000:
                 hint = '照片文件超过1MB'
             else:
-                m = re.match(r'^.+\.(jpg|gif|png)$', filehd.name.lower())
+                m = re.match(r'^.+\.(jpg|gif|png|jpeg)$', filehd.name.lower())
                 if m == None:
                     hint = '请上传一个图片文件'
                 else:
                     photo_url = '/static/main/upload/%s.%s' % (datetime.datetime.now().strftime("%Y%m%d%H%M%S"), m.group(1))
-                    target = open(phupload + photo_url,'wb+')
+                    target = open(pstatic + photo_url,'wb+')
                     target.write(filehd.read())
                     target.close()
                     Pic(title = request.POST.get('title'), link = request.POST.get('link'), src = photo_url).save()
@@ -228,7 +262,10 @@ def cms(request, method = None, id = None):
         return render_to_response('main/cms_pics.html', c)
 
     if not 'a' in user.type:
-        return HttpResponseRedirect('/cms/')
+        bname = '欢迎使用山东大学化学与化工学院网站内容管理系统!'
+        c = locals()
+        c.update(csrf(request))
+        return render_to_response('main/cms.html', c)
     if method == "teas":
         bname = '教师管理'
         
@@ -436,11 +473,11 @@ def teacheredit(request, id, method = None):
             return HttpResponse("<script>parent.photost('请选择一张您的照片','/');</script>")
         if filehd.size > 1000000:
             return HttpResponse("<script>parent.photost('照片文件超过1MB','/');</script>")
-        m = re.match(r'^.+\.(jpg|gif|png)$', filehd.name.lower())
+        m = re.match(r'^.+\.(jpg|gif|png|jpeg)$', filehd.name.lower())
         if m == None:
             return HttpResponse("<script>parent.photost('请上传一个图片文件','/');</script>")
         photo_url = '/static/main/upload/teacher/%s.%s' % (datetime.datetime.now().strftime("%Y%m%d%H%M%S"), m.group(1))
-        target = open(phupload + photo_url,'wb+')
+        target = open(pstatic + photo_url,'wb+')
         target.write(filehd.read())
         target.close()
         try:

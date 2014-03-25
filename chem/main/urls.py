@@ -5,6 +5,7 @@ from main.cms import *
 urlpatterns = patterns('',
     url(r'^$', index),
     url(r'^index.html$', index),
+    url(r'^upload/(?P<type>img|ext)/$', upload),
     url(r'^list-(?P<id>[0-9]+)\.html$', list),
     url(r'^art-(?P<id>[0-9]+)\.html$', article),
     url(r'^introduce\.html$', introduce),
