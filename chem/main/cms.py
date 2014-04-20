@@ -272,7 +272,7 @@ def cms(request, method = None, id = None):
         #添加研究所
         if request.POST.get('labs'):
             try:
-                Lab.objects.get(name = request.POST.get('labs'))
+                Lab.objects.get(name = request.POST.get('labs', state = 1))
                 hint = "该研究所已存在"
             except:
                 Lab(name = request.POST.get('labs')).save()
@@ -292,13 +292,13 @@ def cms(request, method = None, id = None):
 
         #添加教师
         if request.POST.get('name'):
-            try:
-                Teacher.objects.get(name = request.POST.get('name'))
-                hint = "该教师已存在"
-            except:
-                Teacher(name = request.POST.get('name'), labid =  request.POST.get('lab')).save()
-                log("添加教师", ip, user.id)
-                hint = "添加教师成功"
+#            try:
+#                Teacher.objects.get(name = request.POST.get('name'))
+#                hint = "该教师已存在"
+#            except:
+            Teacher(name = request.POST.get('name'), labid =  request.POST.get('lab')).save()
+            log("添加教师", ip, user.id)
+            hint = "添加教师成功"
 
         #删除教师
         if request.POST.get('delete'):

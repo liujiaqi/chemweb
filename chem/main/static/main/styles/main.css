@@ -72,7 +72,7 @@ li { list-style-type:none; }
 .in_disp ul li { margin-bottom:10px; height:42px; line-height:42px; font-size:24px; text-align:center; }
 
 /* list */
-.content { width:720px; min-height:500px; padding:10px 30px; line-height:20px; font-size:14px; text-align:left; background:#EEE; }
+.content { width:720px; min-height:500px; padding:10px 30px; font-size:14px; text-align:left; background:#EEE; }
 .list li { display:block; color:#666; height:22px; line-height:22px; margin-top:4px; border-bottom-style:dotted; border-width:1px; border-color:#AAA; }
 .list a, .list a:hover, .list a:visited { color:#666; display:block; width:65%; height:22px; line-height:22px; float:left; margin-right:10px; text-overflow: ellipsis; overflow:hidden; }
 .list .time { float:right; margin-right:15px; height:22px; line-height:22px; }
@@ -87,9 +87,9 @@ li { list-style-type:none; }
 /* teachers list */
 .teacher_list { border-collapse:separate; margin-left:20px; }
 .teacher_list tr { vertical-align:middle; text-align:center; }
-.teacher_list tr td { width:200px; }
+/*.teacher_list tr td { width:200px; }*/
 .teacher_list a, .teacher_list a:hover, .teacher_list a:visited { color:#000; }
-.teacher_list ul li { width:7em; float:left; }
+.teacher_list ul li { width:6em; float:left; }
 
 /* teachers edit */
 #photoif { color:#F00; max-height:30px; overflow:hidden; }

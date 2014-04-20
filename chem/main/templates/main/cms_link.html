@@ -19,7 +19,7 @@
                 <form method="post">
                     {% csrf_token %}
                     <input type="hidden" name="delete" value="{{ lk.id }}" />
-                    <input type="submit" class="cms_button" value="删除" />
+                    <input type="submit" class="cms_button" value="删除" onclick="return confirm('确定要删除？');" />
                 </form>
             </li>
         {% endfor %}

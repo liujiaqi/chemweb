@@ -21,9 +21,9 @@
                 <a href="{{ art.link }}" title="{{ art.title }}" target="_blank" style="width:385px;">{{ art.title }}</a>
                 <form method="post">
                     {% csrf_token %}
-                    <input type="hidden" name="aid" value="{{ art.id }}"/>
-                    <input type="submit" name="delete" class="cms_button" value="删除"/>
-                    <input type="submit" name="modify" class="cms_button" value="修改"/>
+                    <input type="hidden" name="aid" value="{{ art.id }}" />
+                    <input type="submit" name="delete" class="cms_button" value="删除" onclick="return confirm('确定要删除？');" />
+                    <input type="submit" name="modify" class="cms_button" value="修改" />
                 </form>
                 <div class="time">{{ li.time|date:"Y-m-d" }}</div>
                 {% if art.bid == 4 %}<div class="type">{{ art.type }}</div>{% endif %}
