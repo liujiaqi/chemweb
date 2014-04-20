@@ -31,7 +31,8 @@ li { list-style-type:none; }
 /* left */
 .left { width:200px; height:100%; background-color:#07F; color:#fff; }
 .nav_lf ul li { width:100%; height:40px; line-height:40px; font-size:16px; text-align:center; }
-.nav_lf ul li:hover { background-color:#999; }
+.nav_lf ul li a { width:100%; height:40px; display:block; }
+.nav_lf ul li a:hover { background-color:#999; }
 
 .lf_addr ul { margin-top:80px;}
 .lf_addr ul li { font-size:14px; margin-left:30px; margin-right:10px; }
