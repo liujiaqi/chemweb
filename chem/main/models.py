@@ -59,7 +59,7 @@ class Lab(models.Model):
     state = models.IntegerField(default = 1)
 
     def teacher(self):
-        return Teacher.objects.filter(labid = self.id).order_by("name")
+        return Teacher.objects.filter(labid = self.id, state = 1).order_by("name")
 
     class Meta:
         db_table = 'lab'
