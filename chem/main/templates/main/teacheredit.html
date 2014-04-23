@@ -1,8 +1,20 @@
 {% extends "main/template.html" %}
 {% load staticfiles %}
 {% block js %}
+<style type="text/css">
+<!--
+.subscrclass {background: url("{% static 'main/editor/xheditor_skin/default/img/subs.png' %}") no-repeat scroll 2px 2px rgba(0, 0, 0, 0);}
+.supscrclass {background: url("{% static 'main/editor/xheditor_skin/default/img/sups.png' %}") no-repeat scroll 2px 2px rgba(0, 0, 0, 0);}
+-->
+</style>
 <script type="text/javascript" src="{% static 'main/editor/xheditor.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'main/editor/xheditor_lang/zh-cn.js' %}"></script>
+<script type="text/javascript">
+var allPlugin={
+	subscript:{c:'subscrclass',t:'下标'},
+	superscript:{c:'supscrclass',t:'上标'}
+};
+</script>
 {% endblock %}
 
 {% block chpasswd %}
@@ -32,7 +44,7 @@
                 <form name="photo" action="/teaedit-{{ tea.id }}.html/photo/" method="post" enctype="multipart/form-data" target="hidfr" >
                     <div id="photoif"></div>
                     {% csrf_token %}
-                    <input type="file" name="photo" style="width:180px;"></input>
+                    <input type="file" name="photo" style="width:180px;" />
                     <input type="submit" class="button" value="上传" />
                 </form>
                 <iframe name="hidfr" style="display:none;"></iframe>
@@ -82,7 +94,7 @@
         <tr>
             <td colspan="2">
                 <h4>【科研成果】</h4>
-                <textarea class="xheditor {tools:'Blocktag,List,FontSize,Bold,Cut,Copy,Paste,Pastetext,Source'}" style="height:250px;width:100%;">
+                <textarea class="xheditor {plugins:allPlugin,upImgUrl:'/upload/img/',upImgExt:'jpg,jpeg,gif,png',tools:'Blocktag,List,subscript,superscript,FontSize,Bold,Img,Cut,Copy,Paste,Pastetext,Source'}" style="height:250px;width:100%;">
                 {{ tea.achievement|safe }}
                 </textarea>
             </td>
