@@ -66,7 +66,7 @@ li { list-style-type:none; }
 .in_title_na { float:left; margin-left:40px; }
 .more{ float:right; margin-right:20px; }
 
-.in_list ul li { color:#666; height:22px; line-height:22px; }
+.in_list ul li { color:#666; height:22px; line-height:22px; font-size:12px; }
 .in_list a, .in_list a:hover, .in_list a:visited { display:block; width:65%; height:22px; line-height:22px; float:left; margin:0 25px 0 10px; text-overflow: ellipsis; overflow:hidden; color:#666; }
 
 .in_disp { height:145px; }
