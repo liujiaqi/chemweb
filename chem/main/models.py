@@ -31,7 +31,7 @@ class Pic(models.Model):
 class Block(models.Model):
     id = models.AutoField(primary_key = True)
     name = models.CharField(max_length = 10)
-
+    type = models.IntegerField()
     class Meta:
         db_table = 'block'
 

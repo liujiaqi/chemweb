@@ -109,24 +109,35 @@ def cms(request, method = None, id = None):
         del request.session['id']
         return HttpResponse("OK")
 
-    if method == "news":
+    if method == "news" or method == "intro":
         bls = []#用户可管理的板块
         bids = []#用户可管理的板块的id
-        block = Block.objects.all();
-        for bl in block:
-            if str(bl.id) in user.type:
-                bids.append(bl.id)
-                bls.append(bl)
-        if id != None:
-            if not id in user.type:
-                return HttpResponseRedirect('news.html')
-            id = string.atoi(id)
 
+        if method == "news":
+            block = Block.objects.filter(type = 0);
+            for bl in block:
+                if str(bl.id) in user.type:
+                    bids.append(bl.id)
+                    bls.append(bl)
+            if id != None:
+                if not id in user.type:
+                    return HttpResponseRedirect('news.html')
+                id = string.atoi(id)
+        else:
+            if "a" in user.type:
+                id = 5
+                bids = [5]
+            else:
+                return HttpResponseRedirect('intro.html')
+        
         if request.POST.get('add'):
             if id != None:
                 try:
                     block = Block.objects.get(id = id)
-                    bname = u'%s - 发布消息' % block.name
+                    if method == "news":
+                        bname = u'%s - 发布消息' % block.name
+                    else:
+                        bname = u'%s - 添加介绍' % block.name
                     c = locals()
                     c.update(csrf(request))
                     return render_to_response('main/cms_addart.html', c)
@@ -138,9 +149,12 @@ def cms(request, method = None, id = None):
             try:
                 art = Article.objects.get(id = request.POST.get('aid'))
                 if art.bid not in bids:
-                    log("!!越权请求修改文章!!", ip, user.id)
+                    log("!!越权请求修改文章-%d!!" % article.id, ip, user.id)
                     return HttpResponseRedirect('news.html')
-                bname = '修改消息'
+                if method == "news":
+                    bname = '修改消息'
+                else:
+                    bname = '修改学院介绍'
                 c = locals()
                 c.update(csrf(request))
                 return render_to_response('main/cms_modart.html', c)
@@ -152,11 +166,14 @@ def cms(request, method = None, id = None):
             try:
                 article = Article.objects.get(id = request.POST.get('aid'))
                 if not article.bid in bids:
-                    log("!!越权请求删除文章!!", ip, user.id)
-                    return HttpResponseRedirect('news.html')
+                    log("!!越权请求删除文章-%d!!" % article.id, ip, user.id)
+                    if method == "news":
+                        return HttpResponseRedirect('news.html')
+                    else:
+                        return HttpResponseRedirect('intro.html')
                 article.state = 0
                 article.save()
-                log("删除一篇文章", ip, user.id)
+                log("删除文章-%d" % article.id, ip, user.id)
                 hint = "删除成功"
             except:
                 hint = "不存在要删除的文章"
@@ -176,12 +193,17 @@ def cms(request, method = None, id = None):
                             content = request.POST.get('content'), \
                             time = datetime.datetime.now(), \
                             type = type).save()
-                    log("发布一条消息", ip, user.id)
-                    bname = '消息管理'
-                    hint = "发布成功"
+                    if method == "news":
+                        log("发布一个消息", ip, user.id)
+                        bname = '消息管理'
+                        hint = "发布成功"
+                    else:
+                        log("添加一个学院介绍", ip, user.id)
+                        bname = '学院介绍'
+                        hint = "添加成功"
                 except:
                     hint = "不存在要发布消息的板块"
-                    log("!!请求不存在的板块id!!", ip, user.id)
+                    log("!!请求不存在的板块id-%d!!" % id, ip, user.id)
 
         if request.POST.get('mod_art'):
             if id != None:
@@ -192,8 +214,11 @@ def cms(request, method = None, id = None):
             try:
                 article = Article.objects.get(id = request.POST.get('aid'))
                 if not article.bid in bids:
-                    log("!!越权请求修改文章!!", ip, user.id)
-                    return HttpResponseRedirect('news.html')
+                    log("!!越权请求修改文章-%d!!" % article.id, ip, user.id)
+                    if method == "news":
+                        return HttpResponseRedirect('news.html')
+                    else:
+                        return HttpResponseRedirect('intro.html')
                 article.title = request.POST.get('title')
                 article.author = user.name
                 article.content = request.POST.get('content')
@@ -201,14 +226,17 @@ def cms(request, method = None, id = None):
                 if id != None:
                     article.type = type
                 article.save()
-                log("修改一条消息", ip, user.id)
+                log("修改消息-%d" % article.id, ip, user.id)
                 bname = '消息管理'
                 hint = "修改成功"
             except:
                 hint = "不存在要修改的消息"
                 log("!!不存在要修改的消息!!", ip, user.id)
 
-        bname = '消息管理'
+        if method == "news":
+            bname = '消息管理'
+        else:
+            bname = '学院概况'
         if id == None:
             q = Q()
             for bid in bids:
@@ -369,25 +397,25 @@ def cms(request, method = None, id = None):
         return render_to_response('main/cms_link.html', c)
 
 
-    if method == "intro":
-        if request.POST.get('content'):
-            try:
-                art = Article.objects.get(bid = 0)
-            except:
-                art = Article(bid = 0, time = datetime.datetime.now())
-                art.save()
-            art.content = request.POST.get('content')
-            art.save()
-            return HttpResponseRedirect('/cms/')
+    #if method == "intro":
+    #    if request.POST.get('content'):
+    #        try:
+    #            art = Article.objects.get(bid = 0)
+    #        except:
+    #            art = Article(bid = 0, time = datetime.datetime.now())
+    #            art.save()
+    #        art.content = request.POST.get('content')
+    #        art.save()
+    #        return HttpResponseRedirect('/cms/')
 
-        bname = '学院概况'
-        try:
-            art = Article.objects.get(bid = 0)
-        except:
-            art = {}
-        c = locals()
-        c.update(csrf(request))
-        return render_to_response('main/cms_intro.html', c)
+    #    bname = '学院概况'
+    #    try:
+    #        art = Article.objects.get(bid = 0)
+    #    except:
+    #        art = {}
+    #    c = locals()
+    #    c.update(csrf(request))
+    #    return render_to_response('main/cms_intro.html', c)
 
     #用户管理
     if method == "user":

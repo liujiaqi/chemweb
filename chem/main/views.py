@@ -19,7 +19,7 @@ def index(request):
     return render_to_response('main/index.html', c)
 
 
-def list(request,id):
+def list(request, id):
     nav_top = Nav_top.objects.all()
     nav_lf = Nav_lf.objects.all()
     try:
@@ -40,7 +40,7 @@ def list(request,id):
     return render_to_response('main/list.html', c)
 
 
-def article(request,id):
+def article(request, id):
     nav_top = Nav_top.objects.all()
     nav_lf = Nav_lf.objects.all()
     try:
@@ -52,14 +52,16 @@ def article(request,id):
     c.update(csrf(request))
     return render_to_response('main/article.html', c)
 
-def introduce(request):
+def introduce(request, id):
     nav_top = Nav_top.objects.all()
-    nav_lf = Nav_lf.objects.all()
-    bname = '学院概况'
+    nav_lf = []
+    for a in Article.objects.filter(bid = 5, state = 1).order_by('id'):
+        nav_lf.append({"title":a.title, "link":"/intro-%d.html" % a.id})
     try:
-        art = Article.objects.get(bid = 0)
+        art = Article.objects.get(id = id)
     except:
         art = {}
+    bname = art.title
     c = locals()
     c.update(csrf(request))
     return render_to_response('main/template.html', c)

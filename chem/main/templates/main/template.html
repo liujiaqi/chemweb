@@ -92,32 +92,32 @@
             </table>
         </div>
         <div class="copyrigh" style="height:50px; margin-top:15px; text-align:center;">Copyright (C) 2014 www.chemnew.sdu.edu.cn All rights reserved.</div>
-        <div id="notice" style="position:absolute; height:200px; width:250px; background-color:#eee; border:1px solid #07f; color:#666;" >
-            <p>尊敬的各位老师，请您尽快将学院旧版网站师资介绍中相关内容转移到新网站中，旧网站将于近期关闭。</p>
-            <p>另外，为增进学术交流，请组织学术报告的老师将报告的内容发至<a href="mailto:xsdt@sdu.edu.cn">xsdt@sdu.edu.cn</a>邮箱，并请电话告知64465，学院奖安排专人发布学术交流信息</p>
+        <div id="notice" style="position:absolute; height:180px; width:250px; background-color:#eee; border:1px solid #07f; color:#666;" >
+            <p style="text-indent:2em">尊敬的各位老师，请您尽快将学院旧版网站师资介绍中相关内容转移到新网站中，旧网站将于近期关闭。</p><br>
+            <p style="text-indent:2em">另外，为增进学术交流，请组织学术报告的老师将报告的内容发至<a href="mailto:xsdt@sdu.edu.cn" style="color:#666;">xsdt@sdu.edu.cn</a>邮箱，并请电话告知64465，学院将安排专人发布学术交流信息。</p>
         </div>
+        <script> 
+            var x = 50, y = 60;
+            var xin = true, yin = true;
+            var step = 1;
+            var delay = 20;
+            var obj = document.getElementById("notice")
+            function float() {
+                var L = T = 0;
+                var R = document.documentElement.clientWidth - obj.offsetWidth;
+                var B = document.documentElement.clientHeight - obj.offsetHeight;
+                obj.style.left = x + document.documentElement.scrollLeft + "px";
+                obj.style.top = y + document.documentElement.scrollTop + "px";
+                x = x + step * (xin ? 1 : -1);
+                if (x < L) { xin = true; x = L; }
+                if (x > R) { xin = false; x = R; }
+                y = y + step * (yin ? 1 : -1)
+                if (y < T) { yin = true; y = T; }
+                if (y > B) { yin = false; y = B; }
+            }
+            var itl = setInterval("float()", delay);
+            obj.onmouseover = function () { clearInterval(itl); }
+            obj.onmouseout = function () { itl = setInterval("float()", delay); }
+        </script>
     </body>
-    <script> 
-        var x = 50, y = 60;
-        var xin = true, yin = true;
-        var step = 1;
-        var delay = 20;
-        var obj = document.getElementById("notice")
-        function float() {
-            var L = T = 0;
-            var R = document.documentElement.clientWidth - obj.offsetWidth;
-            var B = document.documentElement.clientHeight - obj.offsetHeight;
-            obj.style.left = x + document.documentElement.scrollLeft + "px";
-            obj.style.top = y + document.documentElement.scrollTop + "px";
-            x = x + step * (xin ? 1 : -1);
-            if (x < L) { xin = true; x = L; }
-            if (x > R) { xin = false; x = R; }
-            y = y + step * (yin ? 1 : -1)
-            if (y < T) { yin = true; y = T; }
-            if (y > B) { yin = false; y = B; }
-        }
-        var itl = setInterval("float()", delay);
-        obj.onmouseover = function () { clearInterval(itl); }
-        obj.onmouseout = function () { itl = setInterval("float()", delay); }
-    </script>
 </html>

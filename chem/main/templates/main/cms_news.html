@@ -2,12 +2,14 @@
 
 {% block content %}
     <div>
+        {% if method == "news" %}
         <select onchange="location.href=this.options[this.selectedIndex].value" >
             <option value="news.html">所有消息</option>
             {% for bl in bls %}
                 <option value="news-{{ bl.id }}.html" {% if id == bl.id %}selected="selected"{% endif %}>{{ bl.name }}</option>
             {% endfor %}
         </select>
+        {% endif %}
         {% if id %}
             <form method="post" style="display:inline;">
                 {% csrf_token %}
