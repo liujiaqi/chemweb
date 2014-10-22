@@ -109,12 +109,15 @@ def cms(request, method = None, id = None):
         del request.session['id']
         return HttpResponse("OK")
 
-    if method == "news" or method == "intro":
+    if method == "news" or method == "intro" or method == "inst":
         bls = []#用户可管理的板块
         bids = []#用户可管理的板块的id
 
-        if method == "news":
-            block = Block.objects.filter(type = 0);
+        if method == "news" or method == "inst":
+            if method == "news":
+                block = Block.objects.filter(type = 0);
+            else:
+                block = Block.objects.filter(type = 2);
             for bl in block:
                 if str(bl.id) in user.type:
                     bids.append(bl.id)
@@ -136,6 +139,8 @@ def cms(request, method = None, id = None):
                     block = Block.objects.get(id = id)
                     if method == "news":
                         bname = u'%s - 发布消息' % block.name
+                    elif method == "inst":
+                        bname = u'%s - 制度建设' % block.name
                     else:
                         bname = u'%s - 添加介绍' % block.name
                     c = locals()
@@ -153,6 +158,8 @@ def cms(request, method = None, id = None):
                     return HttpResponseRedirect('news.html')
                 if method == "news":
                     bname = '修改消息'
+                elif method == "inst":
+                    bname = '修改制度建设'
                 else:
                     bname = '修改学院介绍'
                 c = locals()
@@ -160,7 +167,7 @@ def cms(request, method = None, id = None):
                 return render_to_response('main/cms_modart.html', c)
             except:
                 hint = "不存在要修改的文章"
-                log("修改不存在的文章", ip, user.id)
+                log("!!修改不存在的文章!!", ip, user.id)
 
         if request.POST.get('delete'):
             try:
@@ -169,6 +176,8 @@ def cms(request, method = None, id = None):
                     log("!!越权请求删除文章-%d!!" % article.id, ip, user.id)
                     if method == "news":
                         return HttpResponseRedirect('news.html')
+                    elif method == "inst":
+                        return HttpResponseRedirect('inst.html')
                     else:
                         return HttpResponseRedirect('intro.html')
                 article.state = 0
@@ -196,11 +205,13 @@ def cms(request, method = None, id = None):
                     if method == "news":
                         log("发布一个消息", ip, user.id)
                         bname = '消息管理'
-                        hint = "发布成功"
+                    elif method == "inst":
+                        log("添加一个制度建设", ip, user.id)
+                        bname = '制度建设'
                     else:
                         log("添加一个学院介绍", ip, user.id)
                         bname = '学院介绍'
-                        hint = "添加成功"
+                    hint = "添加成功"
                 except:
                     hint = "不存在要发布消息的板块"
                     log("!!请求不存在的板块id-%d!!" % id, ip, user.id)
@@ -217,6 +228,8 @@ def cms(request, method = None, id = None):
                     log("!!越权请求修改文章-%d!!" % article.id, ip, user.id)
                     if method == "news":
                         return HttpResponseRedirect('news.html')
+                    elif method == "inst":
+                        return HttpResponseRedirect('inst.html')
                     else:
                         return HttpResponseRedirect('intro.html')
                 article.title = request.POST.get('title')
@@ -235,6 +248,8 @@ def cms(request, method = None, id = None):
 
         if method == "news":
             bname = '消息管理'
+        elif method == "inst":
+            bname = '制度建设'
         else:
             bname = '学院概况'
         if id == None:

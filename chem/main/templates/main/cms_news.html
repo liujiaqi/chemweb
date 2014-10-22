@@ -10,6 +10,14 @@
             {% endfor %}
         </select>
         {% endif %}
+        {% if method == "inst" %}
+        <select onchange="location.href=this.options[this.selectedIndex].value" >
+            <option value="inst.html">所有消息</option>
+            {% for bl in bls %}
+                <option value="inst-{{ bl.id }}.html" {% if id == bl.id %}selected="selected"{% endif %}>{{ bl.name }}</option>
+            {% endfor %}
+        </select>
+        {% endif %}
         {% if id %}
             <form method="post" style="display:inline;">
                 {% csrf_token %}
