@@ -66,6 +66,28 @@ def introduce(request, id):
     c.update(csrf(request))
     return render_to_response('main/template.html', c)
 
+def institute(request, id):
+    nav_top = Nav_top.objects.all()
+    nav_lf = []
+    for b in Block.objects.filter(type = 2).order_by('id'):
+        nav_lf.append({"title":b.name, "link":"/inst-%d.html" % b.id})
+    try:
+        block = Block.objects.get(id = id)
+    except:
+        block = {}
+    bname = block.name
+
+    try:
+        curpage = int(request.GET.get('page'))
+    except:
+        curpage = 1
+
+    page = divpage(Article.objects.filter(bid = id, state = 1).count(), 20, curpage)
+    article = Article.objects.filter(bid = id, state = 1).order_by('-id')[(page['page']-1)*20:page['page']*20]
+    c = locals()
+    c.update(csrf(request))
+    return render_to_response('main/list.html', c)
+
 
 def teacherls(request):
     nav_top = Nav_top.objects.all()
