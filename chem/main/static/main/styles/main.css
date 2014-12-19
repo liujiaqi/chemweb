@@ -22,9 +22,9 @@ li { list-style-type:none; }
 .hint { color:red; }
 /* top */
 .banner { width:1000px; height:203px; background-image:url(../images/banner.jpg); }
-.nav_top { width:1000px; line-height:35px; background-image:url(../images/leadbg.jpg); background-repeat:repeat-x; font-size:12px; overflow:hidden; }
+.nav_top { width:1000px; line-height:35px; background-image:url(../images/leadbg.jpg); background-repeat:repeat-x; font-size:14px; overflow:hidden; }
 .nav_labs { float:left; width:870px; height:100%; }
-.nav_labs  ul li { display:inline; margin-left:8px; }
+.nav_labs  ul li { display:inline; margin-left:110px; }
 .nav_labs  ul { display:inline; }
 .nav_eng { float:right; margin-right:20px; height:100%; text-align:right; font-size:18px; }
 
@@ -70,7 +70,7 @@ li { list-style-type:none; }
 .in_list a, .in_list a:hover, .in_list a:visited { display:block; width:65%; height:22px; line-height:22px; float:left; margin:0 25px 0 10px; text-overflow: ellipsis; overflow:hidden; color:#666; }
 
 .in_disp { height:145px; }
-.in_disp ul li { margin-bottom:10px; height:42px; line-height:42px; font-size:24px; text-align:center; }
+.in_disp ul li { margin-bottom:10px; height:60px; line-height:55px; font-size:26px; text-align:center; }
 
 /* list */
 .content { width:720px; min-height:500px; padding:10px 30px; font-size:14px; text-align:left; background:#EEE; }

@@ -4,6 +4,8 @@ class Nav_top(models.Model):
     id = models.AutoField(primary_key = True)
     title = models.CharField(max_length = 20)
     link = models.CharField(max_length = 100, default = '#')
+    priority = models.IntegerField()
+    state = models.IntegerField(default = 1)
 
     class Meta:
         db_table = 'nav_top'
@@ -13,6 +15,8 @@ class Nav_lf(models.Model):
     id = models.AutoField(primary_key = True)
     title = models.CharField(max_length = 20)
     link = models.CharField(max_length = 100, default = '#')
+    priority = models.IntegerField()
+    state = models.IntegerField(default = 1)
 
     class Meta:
         db_table = 'nav_lf'

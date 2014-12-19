@@ -7,8 +7,8 @@ from main.models import *
 from main.cms import divpage
 
 def index(request):
-    nav_top = Nav_top.objects.all()
-    nav_lf = Nav_lf.objects.all()
+    nav_top = Nav_top.objects.filter(state = 1).order_by('-priority').all()
+    nav_lf = Nav_lf.objects.filter(state = 1).order_by('-priority').all()
     pic = Pic.objects.filter(state = 1).order_by('-id')[:5]
     art = [Article.objects.filter(bid = 1, state = 1).order_by('-id')[:7], \
            Article.objects.filter(bid = 2, state = 1).order_by('-id')[:5], \
@@ -20,8 +20,8 @@ def index(request):
 
 
 def list(request, id):
-    nav_top = Nav_top.objects.all()
-    nav_lf = Nav_lf.objects.all()
+    nav_top = Nav_top.objects.filter(state = 1).order_by('-priority').all()
+    nav_lf = Nav_lf.objects.filter(state = 1).order_by('-priority').all()
     try:
         bname = Block.objects.get(id = id).name
     except:
@@ -41,8 +41,8 @@ def list(request, id):
 
 
 def article(request, id):
-    nav_top = Nav_top.objects.all()
-    nav_lf = Nav_lf.objects.all()
+    nav_top = Nav_top.objects.filter(state = 1).order_by('-priority').all()
+    nav_lf = Nav_lf.objects.filter(state = 1).order_by('-priority').all()
     try:
         art = Article.objects.get(id = id)
         bname = Block.objects.get(id = art.bid ).name
@@ -53,7 +53,7 @@ def article(request, id):
     return render_to_response('main/article.html', c)
 
 def introduce(request, id):
-    nav_top = Nav_top.objects.all()
+    nav_top = Nav_top.objects.filter(state = 1).order_by('-priority').all()
     nav_lf = []
     for a in Article.objects.filter(bid = 5, state = 1).order_by('id'):
         nav_lf.append({"title":a.title, "link":"/intro-%d.html" % a.id})
@@ -67,7 +67,7 @@ def introduce(request, id):
     return render_to_response('main/template.html', c)
 
 def institute(request, id):
-    nav_top = Nav_top.objects.all()
+    nav_top = Nav_top.objects.filter(state = 1).order_by('-priority').all()
     nav_lf = []
     for b in Block.objects.filter(type = 2).order_by('id'):
         nav_lf.append({"title":b.name, "link":"/inst-%d.html" % b.id})
@@ -90,8 +90,8 @@ def institute(request, id):
 
 
 def teacherls(request):
-    nav_top = Nav_top.objects.all()
-    nav_lf = Nav_lf.objects.all()
+    nav_top = Nav_top.objects.filter(state = 1).order_by('-priority').all()
+    nav_lf = Nav_lf.objects.filter(state = 1).order_by('-priority').all()
     bname = '师资力量'
     lab = Lab.objects.filter(state = 1)
     c = locals()
@@ -100,8 +100,8 @@ def teacherls(request):
 
 
 def teacherdetail(request,id):
-    nav_top = Nav_top.objects.all()
-    nav_lf = Nav_lf.objects.all()
+    nav_top = Nav_top.objects.filter(state = 1).order_by('-priority').all()
+    nav_lf = Nav_lf.objects.filter(state = 1).order_by('-priority').all()
     bname = '导师风采'
     try:
         tea = Teacher.objects.get(id = id)
